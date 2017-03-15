@@ -30,10 +30,10 @@ namespace PKHUD
 {
 	public static class Assets
 	{
-		private static readonly Lazy<UIImage> _crossImageLazy = new Lazy<UIImage>(() => UIImage.FromBundle("Cross"));
-		private static readonly Lazy<UIImage> _checkmarkImageLazy = new Lazy<UIImage>(() => UIImage.FromBundle("Checkmark"));
-		private static readonly Lazy<UIImage> _progressActivityImageLazy = new Lazy<UIImage>(() => UIImage.FromBundle("ProgressActivity"));
-		private static readonly Lazy<UIImage> _progressCircularImageLazy = new Lazy<UIImage>(() => UIImage.FromBundle("ProgressCircular"));
+		private static readonly Lazy<UIImage> _crossImageLazy = new Lazy<UIImage>(() => UIImage.FromFile("Cross"));
+		private static readonly Lazy<UIImage> _checkmarkImageLazy = new Lazy<UIImage>(() => UIImage.FromFile("Checkmark"));
+		private static readonly Lazy<UIImage> _progressActivityImageLazy = new Lazy<UIImage>(() => UIImage.FromFile("ProgressActivity"));
+		private static readonly Lazy<UIImage> _progressCircularImageLazy = new Lazy<UIImage>(() => UIImage.FromFile("ProgressCircular"));
 
 		public static UIImage CrossImage
 		{

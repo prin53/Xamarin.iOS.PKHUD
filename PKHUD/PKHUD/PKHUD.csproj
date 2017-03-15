@@ -44,10 +44,6 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Resources\" />
-    <Folder Include="Images.xcassets\Checkmark.imageset\" />
-    <Folder Include="Images.xcassets\Cross.imageset\" />
-    <Folder Include="Images.xcassets\ProgressActivity.imageset\" />
-    <Folder Include="Images.xcassets\ProgressCircular.imageset\" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -70,15 +66,14 @@
     <Compile Include="ContentFactory.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ImageAsset Include="Images.xcassets\Contents.json" />
-    <ImageAsset Include="Images.xcassets\Checkmark.imageset\Contents.json" />
-    <ImageAsset Include="Images.xcassets\Checkmark.imageset\checkmark.pdf" />
-    <ImageAsset Include="Images.xcassets\Cross.imageset\Contents.json" />
-    <ImageAsset Include="Images.xcassets\Cross.imageset\cross.pdf" />
-    <ImageAsset Include="Images.xcassets\ProgressActivity.imageset\Contents.json" />
-    <ImageAsset Include="Images.xcassets\ProgressActivity.imageset\progress.pdf" />
-    <ImageAsset Include="Images.xcassets\ProgressCircular.imageset\Contents.json" />
-    <ImageAsset Include="Images.xcassets\ProgressCircular.imageset\progress_circular.pdf" />
+    <BundleResource Include="Resources\ProgressActivity%403x.png" />
+    <BundleResource Include="Resources\ProgressActivity%402x.png" />
+    <BundleResource Include="Resources\Checkmark%402x.png" />
+    <BundleResource Include="Resources\Checkmark%403x.png" />
+    <BundleResource Include="Resources\Cross%402x.png" />
+    <BundleResource Include="Resources\Cross%403x.png" />
+    <BundleResource Include="Resources\ProgressCircular%402x.png" />
+    <BundleResource Include="Resources\ProgressCircular%403x.png" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath)\Xamarin\iOS\Xamarin.iOS.CSharp.targets" />
 </Project>
