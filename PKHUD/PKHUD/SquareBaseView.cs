@@ -48,7 +48,7 @@ namespace PKHUD
 			{
 				Alpha = .85f,
 				ClipsToBounds = true,
-				ContentMode = UIViewContentMode.Center
+				ContentMode = UIViewContentMode.ScaleAspectFit
 			};
 		};
 
