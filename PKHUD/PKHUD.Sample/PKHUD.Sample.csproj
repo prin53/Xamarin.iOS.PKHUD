@@ -9,6 +9,7 @@
     <RootNamespace>PKHUD.Sample</RootNamespace>
     <AssemblyName>PKHUD.Sample</AssemblyName>
     <IPhoneResourcePrefix>Resources</IPhoneResourcePrefix>
+    <ReleaseVersion>1.0.3</ReleaseVersion>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|iPhoneSimulator' ">
     <DebugSymbols>true</DebugSymbols>
