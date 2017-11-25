@@ -59,7 +59,7 @@ namespace PKHUD
 
 				Frame = new CGRect(Frame.Location, _content.Bounds.Size);
 
-				AddSubview(_content);
+				ContentView.AddSubview(_content);
 			}
 		}
 
