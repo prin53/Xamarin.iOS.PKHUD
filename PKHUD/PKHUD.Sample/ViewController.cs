@@ -42,6 +42,9 @@ namespace PKHUD.Sample
     /// </summary>
     public class ViewController : UIViewController
     {
+        private const int Padding = 16;
+        private const int ButtonHeight = 44;
+
         protected UIImageView BackgroundImage { get; private set; }
 
         protected UIStackView ButtonsStack { get; private set; }
@@ -180,21 +183,40 @@ namespace PKHUD.Sample
 
             View.AddSubviews(BackgroundImage, ButtonsStack);
 
+            if (UIDevice.CurrentDevice.CheckSystemVersion(11, 0))
+            {
+                View.AddConstraint(ButtonsStack.LeadingAnchor.ConstraintEqualTo(
+                    View.SafeAreaLayoutGuide.LeadingAnchor,
+                    Padding
+                ));
+                View.AddConstraint(ButtonsStack.TrailingAnchor.ConstraintEqualTo(
+                    View.SafeAreaLayoutGuide.TrailingAnchor,
+                    -Padding
+                ));
+                View.AddConstraint(ButtonsStack.BottomAnchor.ConstraintEqualTo(
+                    View.SafeAreaLayoutGuide.BottomAnchor,
+                    -Padding
+                ));
+            }
+            else
+            {
+                View.AddConstraint(ButtonsStack.LeadingAnchor.ConstraintEqualTo(View.LeadingAnchor, Padding));
+                View.AddConstraint(ButtonsStack.TrailingAnchor.ConstraintEqualTo(View.TrailingAnchor, -Padding));
+                View.AddConstraint(ButtonsStack.BottomAnchor.ConstraintEqualTo(View.BottomAnchor, -Padding));
+            }
+
             View.AddConstraints(new[]
             {
                 BackgroundImage.TopAnchor.ConstraintEqualTo(View.TopAnchor),
                 BackgroundImage.BottomAnchor.ConstraintEqualTo(View.BottomAnchor),
                 BackgroundImage.LeadingAnchor.ConstraintEqualTo(View.LeadingAnchor),
                 BackgroundImage.TrailingAnchor.ConstraintEqualTo(View.TrailingAnchor),
-                ButtonsStack.LeadingAnchor.ConstraintEqualTo(View.LeadingAnchor, 16),
-                ButtonsStack.TrailingAnchor.ConstraintEqualTo(View.TrailingAnchor, -16),
-                ButtonsStack.BottomAnchor.ConstraintEqualTo(View.BottomAnchor, -16),
-                AnimatedSuccessButton.HeightAnchor.ConstraintEqualTo(44),
-                AnimatedErrorButton.HeightAnchor.ConstraintEqualTo(44),
-                AnimatedProgressButton.HeightAnchor.ConstraintEqualTo(44),
-                AnimatedStatusProgressButton.HeightAnchor.ConstraintEqualTo(44),
-                AnimatedStatusProgressButton.HeightAnchor.ConstraintEqualTo(44),
-                TextButton.HeightAnchor.ConstraintEqualTo(44)
+                AnimatedSuccessButton.HeightAnchor.ConstraintEqualTo(ButtonHeight),
+                AnimatedErrorButton.HeightAnchor.ConstraintEqualTo(ButtonHeight),
+                AnimatedProgressButton.HeightAnchor.ConstraintEqualTo(ButtonHeight),
+                GraceAnimatedProgressButton.HeightAnchor.ConstraintEqualTo(ButtonHeight),
+                AnimatedStatusProgressButton.HeightAnchor.ConstraintEqualTo(ButtonHeight),
+                TextButton.HeightAnchor.ConstraintEqualTo(ButtonHeight)
             });
         }
 
