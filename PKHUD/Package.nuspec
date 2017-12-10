@@ -2,7 +2,7 @@
 <package >
     <metadata>
         <id>Prin53.Xamarin.iOS.PKHUD</id>
-        <version>1.0.3</version>
+        <version>1.0.4</version>
         <authors>Denys Fiediaiev</authors>
         <owners>Denys Fiediaiev</owners>
         <licenseUrl>https://github.com/Prin53/Xamarin.iOS.PKHUD/blob/master/LICENSE</licenseUrl>
@@ -10,7 +10,7 @@
         <iconUrl>http://imgur.com/jDiKURX</iconUrl>
         <requireLicenseAcceptance>false</requireLicenseAcceptance>
         <description>PKHUD Xamarin</description>
-        <releaseNotes>Fixed issue with image resources.</releaseNotes>
+        <releaseNotes>New version contains builder to be able to create and configure PKHUD.</releaseNotes>
         <copyright>Denys Fiediaiev 2017</copyright>
         <tags>Xamarin iOS PKHUD</tags>
     </metadata>
