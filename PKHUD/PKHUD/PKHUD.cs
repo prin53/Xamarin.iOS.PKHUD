@@ -36,12 +36,21 @@ namespace PKHUD
     {
         private readonly NSObject _willEnterForegroundNotificationObserver;
         private readonly ContainerView _container;
-        
+
+        private NSTimer _graceTimer;
+
         private NSTimer _timer;
 
         public static PKHUD Instance { get; } = new PKHUD();
 
         public UIView ViewToPresentOn { get; }
+
+        /// Grace period is the time (in seconds) that the invoked method may be run without
+        /// showing the HUD. If the task finishes before the grace time runs out, the HUD will
+        /// not be shown at all.
+        /// This may be used to prevent HUD display for very short tasks.
+        /// Defaults to Zero (no grace time).
+        public TimeSpan GracePeriod { get; set; } = TimeSpan.Zero;
 
         public bool DimsBackground { get; set; }
 
@@ -85,11 +94,15 @@ namespace PKHUD
                                        | UIViewAutoresizing.FlexibleRightMargin
                                        | UIViewAutoresizing.FlexibleTopMargin
                                        | UIViewAutoresizing.FlexibleBottomMargin
-                }
+                },
+                IsAccessibilityElement = true,
+                AccessibilityIdentifier = nameof(PKHUD)
             };
 
             DimsBackground = true;
             UserInteractionOnUnderlyingViewsEnabled = false;
+
+            _container.FrameView.Content = new ProgressView();
         }
 
         public PKHUD(UIView view) : this()
@@ -122,20 +135,49 @@ namespace PKHUD
 
                 _container.Frame = new CGRect(CGPoint.Empty, view.Frame.Size);
                 _container.AutoresizingMask = UIViewAutoresizing.FlexibleWidth | UIViewAutoresizing.FlexibleHeight;
+                _container.Hidden = true;
             }
-
-            _container.ShowFrameView();
 
             if (DimsBackground)
             {
                 _container.ShowBackgroundView(true);
             }
 
+            // If the grace time is set, postpone the HUD display
+            if (GracePeriod > TimeSpan.Zero)
+            {
+                var timer = NSTimer.CreateTimer(GracePeriod, HandleGraceTimer);
+                NSRunLoop.Current.AddTimer(timer, NSRunLoopMode.Common);
+                _graceTimer = timer;
+            }
+            else
+            {
+                ShowContent();
+            }
+        }
+
+        private void HandleGraceTimer(NSTimer obj)
+        {
+            // Show the HUD only if the task is still running
+            if (_graceTimer != null && _graceTimer.IsValid)
+            {
+                ShowContent();
+            }
+        }
+
+        private void ShowContent()
+        {
+            _graceTimer?.Invalidate();
+
+            _container.ShowFrameView();
+
             StartAnimatingContentView();
         }
 
         public virtual void Hide(bool animated = true, Action<bool> completion = default(Action<bool>))
         {
+            _graceTimer?.Invalidate();
+
             _container.HideFrameView(animated, completion);
 
             StopAnimatingContentView();
@@ -143,6 +185,8 @@ namespace PKHUD
 
         public virtual void Hide(TimeSpan delay, bool animated = true, Action<bool> completion = default(Action<bool>))
         {
+            _graceTimer?.Invalidate();
+
             _timer = NSTimer.CreateScheduledTimer(delay, _ =>
             {
                 Hide(animated, completion);

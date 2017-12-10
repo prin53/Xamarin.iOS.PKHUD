@@ -52,6 +52,8 @@ namespace PKHUD.Sample
 
         protected UIButton AnimatedProgressButton { get; private set; }
 
+        protected UIButton GraceAnimatedProgressButton { get; private set; }
+
         protected UIButton AnimatedStatusProgressButton { get; private set; }
 
         protected UIButton TextButton { get; private set; }
@@ -94,6 +96,19 @@ namespace PKHUD.Sample
             HUD.Flash(ContentFactory.CreateProgressContent("Title", "Subtitle"), TimeSpan.FromSeconds(2));
         }
 
+        private static async void GraceAnimatedStatusProgressButtonOnTouchUpInside(object sender, EventArgs e)
+        {
+            PKHUD.Instance.GracePeriod = TimeSpan.FromSeconds(1);
+
+            HUD.Show(ContentFactory.CreateProgressContent("Title", "Subtitle"));
+
+            await Task.Delay(TimeSpan.FromSeconds(2));
+
+            HUD.Hide(true);
+
+            PKHUD.Instance.GracePeriod = TimeSpan.Zero;
+        }
+
         private static void TextButtonOnTouchUpInside(object sender, EventArgs e)
         {
             HUD.Flash(ContentFactory.CreateLabelContent("Requesting Licence…"), TimeSpan.FromSeconds(2),
@@ -107,6 +122,7 @@ namespace PKHUD.Sample
                 AnimatedSuccessButton.TouchUpInside -= AnimatedSuccessButtonOnTouchUpInside;
                 AnimatedErrorButton.TouchUpInside -= AnimatedErrorButtonOnTouchUpInside;
                 AnimatedProgressButton.TouchUpInside -= AnimatedProgressButtonOnTouchUpInside;
+                GraceAnimatedProgressButton.TouchUpInside -= GraceAnimatedStatusProgressButtonOnTouchUpInside;
                 AnimatedStatusProgressButton.TouchUpInside -= AnimatedStatusProgressButtonOnTouchUpInside;
                 TextButton.TouchUpInside -= TextButtonOnTouchUpInside;
             }
@@ -146,6 +162,9 @@ namespace PKHUD.Sample
             AnimatedProgressButton = CreateButton("Animated Progress HUD");
             AnimatedProgressButton.TouchUpInside += AnimatedProgressButtonOnTouchUpInside;
 
+            GraceAnimatedProgressButton = CreateButton("Grace Animated Progress HUD");
+            GraceAnimatedProgressButton.TouchUpInside += GraceAnimatedStatusProgressButtonOnTouchUpInside;
+
             AnimatedStatusProgressButton = CreateButton("Animated Status Progress HUD");
             AnimatedStatusProgressButton.TouchUpInside += AnimatedStatusProgressButtonOnTouchUpInside;
 
@@ -155,6 +174,7 @@ namespace PKHUD.Sample
             ButtonsStack.AddArrangedSubview(AnimatedSuccessButton);
             ButtonsStack.AddArrangedSubview(AnimatedErrorButton);
             ButtonsStack.AddArrangedSubview(AnimatedProgressButton);
+            ButtonsStack.AddArrangedSubview(GraceAnimatedProgressButton);
             ButtonsStack.AddArrangedSubview(AnimatedStatusProgressButton);
             ButtonsStack.AddArrangedSubview(TextButton);
 
@@ -172,6 +192,7 @@ namespace PKHUD.Sample
                 AnimatedSuccessButton.HeightAnchor.ConstraintEqualTo(44),
                 AnimatedErrorButton.HeightAnchor.ConstraintEqualTo(44),
                 AnimatedProgressButton.HeightAnchor.ConstraintEqualTo(44),
+                AnimatedStatusProgressButton.HeightAnchor.ConstraintEqualTo(44),
                 AnimatedStatusProgressButton.HeightAnchor.ConstraintEqualTo(44),
                 TextButton.HeightAnchor.ConstraintEqualTo(44)
             });
