@@ -27,14 +27,22 @@
 using System;
 using CoreGraphics;
 using Foundation;
+using UIKit;
 
-namespace PKHUD
+namespace PKHUD.Views
 {
     /// <summary>
     /// Provides an indeterminate progress view.
     /// </summary>
-    public class ProgressView : SquareBaseView, IAnimatable
+    public class ProgressView : SquareBaseView, IAnimation
     {
+        public override UIImage Image
+        {
+            get => Assets.ProgressActivity;
+            // ReSharper disable once ValueParameterNotUsed
+            set => base.Image = Assets.ProgressActivity;
+        }
+        
         public ProgressView(CGRect frame) : base(frame)
         {
             /* Required constructor */
@@ -50,8 +58,7 @@ namespace PKHUD
             /* Required constructor */
         }
 
-        public ProgressView(string title = default(string), string subtitle = default(string)) 
-            : base(Assets.ProgressActivity, title, subtitle)
+        public ProgressView()
         {
             /* Required constructor */
         }

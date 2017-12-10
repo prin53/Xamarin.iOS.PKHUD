@@ -1,5 +1,5 @@
 ﻿//
-// IAnimating.cs
+// ContentBuilder.cs
 //
 // Author:
 //       Denys Fiediaiev <prineduard@gmail.com>
@@ -24,12 +24,51 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
+using PKHUD.Views;
+using UIKit;
+
 namespace PKHUD
 {
-    public interface IAnimatable
+    public class ContentBuilder
     {
-        void StartAnimation();
+        public static Builder WithContent(UIView content)
+        {
+            return new Builder(content);
+        }
+        
+        public static Builder WithSquareContent()
+        {
+            return new Builder(new SquareBaseView());
+        }
+        
+        public static Builder WithRotatingSquareContent()
+        {
+            return new Builder(new RotatingImageView());
+        }
 
-        void StopAnimation();
+        public static Builder WithSuccessContent()
+        {
+            return new Builder(new SuccessView());
+        }
+
+        public static Builder WithErrorContent()
+        {
+            return new Builder(new ErrorView());
+        }
+        
+        public static Builder WithProgressContent()
+        {
+            return new Builder(new ProgressView());
+        }
+        
+        public static Builder WithSystemActivityContent()
+        {
+            return new Builder(new SystemActivityIndicatorView());
+        }
+        
+        public static Builder WithLabelContent()
+        {
+            return new Builder(new TextView());
+        }
     }
 }

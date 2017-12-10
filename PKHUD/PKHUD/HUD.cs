@@ -1,5 +1,5 @@
 ﻿//
-// HUD.cs
+// PKHUD.cs
 //
 // Author:
 //       Denys Fiediaiev <prineduard@gmail.com>
@@ -25,58 +25,183 @@
 // THE SOFTWARE.
 
 using System;
+using System.Linq;
+using CoreGraphics;
+using Foundation;
 using UIKit;
 
 namespace PKHUD
 {
-    public static class HUD
+    public class Hud : NSObject
     {
-        public static bool DimsBackground
+        private static Hud _currentHud;
+
+        private readonly NSObject _willEnterForegroundNotificationObserver;
+        private readonly ContainerView _container;
+
+        private NSTimer _currentGraceTimer;
+        private NSTimer _timer;
+
+        public UIView ViewToPresentOn { get; internal set; }
+
+        public TimeSpan GracePeriod { get; internal set; }
+
+        public bool DimsBackground { get; internal set; }
+
+        public UIView ContentView
         {
-            get => PKHUD.Instance.DimsBackground;
-            set => PKHUD.Instance.DimsBackground = value;
+            get => _container.FrameView.Content;
+            internal set
+            {
+                _container.FrameView.Content = value;
+
+                TryStartAnimatingContentView();
+            }
         }
 
-        public static bool AllowsInteraction
+        public UIVisualEffect Effect
         {
-            get => PKHUD.Instance.UserInteractionOnUnderlyingViewsEnabled;
-            set => PKHUD.Instance.UserInteractionOnUnderlyingViewsEnabled = value;
+            get => _container.FrameView.Effect;
+            internal set => _container.FrameView.Effect = value;
         }
 
-        public static bool IsVisible => PKHUD.Instance.IsVisible;
-
-        public static void Show(UIView view, UIView onView = default(UIView))
+        public bool UserInteractionOnUnderlyingViewsEnabled
         {
-            PKHUD.Instance.ContentView = view;
-            PKHUD.Instance.Show(onView);
+            get => !_container.UserInteractionEnabled;
+            internal set => _container.UserInteractionEnabled = !value;
         }
 
-        public static void Hide(Action<bool> completion = default(Action<bool>))
+        public bool IsVisible => !_container.Hidden;
+
+        internal Hud()
         {
-            PKHUD.Instance.Hide(false, completion);
+            _willEnterForegroundNotificationObserver = NSNotificationCenter.DefaultCenter.AddObserver(
+                UIApplication.WillEnterForegroundNotification,
+                WillEnterForeground
+            );
+
+            _container = new ContainerView
+            {
+                FrameView =
+                {
+                    AutoresizingMask = UIViewAutoresizing.FlexibleLeftMargin
+                                       | UIViewAutoresizing.FlexibleRightMargin
+                                       | UIViewAutoresizing.FlexibleTopMargin
+                                       | UIViewAutoresizing.FlexibleBottomMargin
+                },
+                IsAccessibilityElement = true,
+                AccessibilityIdentifier = nameof(Hud)
+            };
         }
 
-        public static void Hide(bool animated, Action<bool> completion = default(Action<bool>))
+        private void TryStartAnimatingContentView()
         {
-            PKHUD.Instance.Hide(animated, completion);
+            (ContentView as IAnimation)?.StartAnimation();
         }
 
-        public static void Hide(TimeSpan delay, bool animated = true, Action<bool> completion = default(Action<bool>))
+        private void TryStopAnimatingContentView()
         {
-            PKHUD.Instance.Hide(delay, animated, completion);
+            (ContentView as IAnimation)?.StopAnimation();
         }
 
-        public static void Flash(UIView view, UIView onView = default(UIView))
+        private void WillEnterForeground(NSNotification notification)
         {
-            Show(view, onView);
-            Hide(true);
+            TryStartAnimatingContentView();
         }
 
-        public static void Flash(UIView view, TimeSpan delay, Action<bool> completion = default(Action<bool>),
-            UIView onView = default(UIView))
+        private void HandleGraceTime(NSTimer _)
         {
-            Show(view, onView);
-            Hide(delay, true, completion);
+            if (_currentGraceTimer == null || !_currentGraceTimer.IsValid)
+            {
+                return;
+            }
+
+            ShowContent();
+        }
+
+        private void ShowContent()
+        {
+            _currentGraceTimer?.Invalidate();
+
+            _container.ShowFrameView();
+
+            TryStartAnimatingContentView();
+        }
+
+        protected override void Dispose(bool disposing)
+        {
+            if (disposing)
+            {
+                NSNotificationCenter.DefaultCenter.RemoveObserver(_willEnterForegroundNotificationObserver);
+            }
+
+            base.Dispose(disposing);
+        }
+
+        public void Show()
+        {
+            _currentHud?.Hide();
+            _currentHud = this;
+
+            var view = ViewToPresentOn ?? UIApplication.SharedApplication.KeyWindow;
+
+            if (!view.Subviews.Contains(_container))
+            {
+                view.AddSubview(_container);
+
+                _container.Frame = new CGRect(CGPoint.Empty, view.Frame.Size);
+                _container.AutoresizingMask = UIViewAutoresizing.FlexibleWidth | UIViewAutoresizing.FlexibleHeight;
+                _container.Hidden = true;
+            }
+
+            if (DimsBackground)
+            {
+                _container.ShowBackgroundView(true);
+            }
+
+            if (GracePeriod > TimeSpan.Zero)
+            {
+                var timer = NSTimer.CreateTimer(GracePeriod, HandleGraceTime);
+
+                NSRunLoop.Current.AddTimer(timer, NSRunLoopMode.Common);
+
+                _currentGraceTimer = timer;
+            }
+            else
+            {
+                ShowContent();
+            }
+        }
+
+        public void Flash(TimeSpan duration)
+        {
+            Show();
+            HideWithDelay(duration);
+        }
+        
+        public void Hide(bool animated = true, Action completion = default(Action))
+        {
+            _currentGraceTimer?.Invalidate();
+
+            _container.HideFrameView(animated, completion);
+
+            TryStopAnimatingContentView();
+        }
+
+        public void HideWithDelay(TimeSpan delay, bool animated = true, Action completion = default(Action))
+        {
+            _currentGraceTimer?.Invalidate();
+
+            _timer = NSTimer.CreateScheduledTimer(delay, _ =>
+            {
+                Hide(animated, completion);
+                _timer.Invalidate();
+            });
+        }
+
+        public static ContentBuilder Create()
+        {
+            return new ContentBuilder();
         }
     }
 }

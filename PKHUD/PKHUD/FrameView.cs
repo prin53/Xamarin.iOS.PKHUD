@@ -63,17 +63,17 @@ namespace PKHUD
 
         public FrameView(NSObjectFlag t) : base(t)
         {
-            Initialize();
+            /* Required constructor */
         }
 
         public FrameView(NSCoder coder) : base(coder)
         {
-            Initialize();
+            /* Required constructor */
         }
 
         public FrameView(IntPtr handle) : base(handle)
         {
-            Initialize();
+            /* Required constructor */
         }
 
         public FrameView() : base(UIBlurEffect.FromStyle(UIBlurEffectStyle.Light))
@@ -81,7 +81,7 @@ namespace PKHUD
             Initialize();
         }
 
-        protected void Initialize()
+        private void Initialize()
         {
             Content = new UIView();
 

@@ -1,5 +1,5 @@
 ﻿//
-// ContentType.cs
+// WideBaseView.cs
 //
 // Author:
 //       Denys Fiediaiev <prineduard@gmail.com>
@@ -24,47 +24,43 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
+using System;
+using CoreGraphics;
+using Foundation;
 using UIKit;
 
-namespace PKHUD
+namespace PKHUD.Views
 {
-    public static class ContentFactory
+    /// <summary>
+    /// A wide base view, which can be subclassed with additional views.
+    /// </summary>
+    public class WideBaseView : UIView
     {
-        public static UIView CreateSuccessContent(string title = default(string), string subtitle = default(string))
+        public static CGRect DefaultWideBaseViewFrame { get; }
+
+        static WideBaseView()
         {
-            return new SuccessView(title, subtitle);
+            DefaultWideBaseViewFrame = new CGRect(CGPoint.Empty, new CGSize(265, 90));
         }
 
-        public static UIView CreateErrorContent(string title = default(string), string subtitle = default(string))
+        public WideBaseView(CGRect frame) : base(frame)
         {
-            return new ErrorView(title, subtitle);
+            /* Required constructor */
         }
 
-        public static UIView CreateProgressContent(string title = default(string), string subtitle = default(string))
+        public WideBaseView(NSCoder coder) : base(coder)
         {
-            return new ProgressView(title, subtitle);
+            /* Required constructor */
         }
 
-        public static UIView CreateImageContent(UIImage image, string title = default(string),
-            string subtitle = default(string))
+        public WideBaseView(IntPtr handle) : base(handle)
         {
-            return new SquareBaseView(image, title, subtitle);
+            /* Required constructor */
         }
 
-        public static UIView CreateRotatingImageContent(UIImage image, string title = default(string),
-            string subtitle = default(string))
+        public WideBaseView() : base(DefaultWideBaseViewFrame)
         {
-            return new RotatingImageView(image, title, subtitle);
-        }
-
-        public static UIView CreateLabelContent(string text)
-        {
-            return new TextView(text);
-        }
-
-        public static UIView CreateSystemActivityContent()
-        {
-            return new SystemActivityIndicatorView();
+            /* Required constructor */
         }
     }
 }

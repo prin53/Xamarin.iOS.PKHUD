@@ -85,7 +85,7 @@ namespace PKHUD
             Hidden = false;
         }
 
-        public void HideFrameView(bool animated, Action<bool> completion)
+        public void HideFrameView(bool animated, Action completion)
         {
             if (Hidden)
             {
@@ -98,19 +98,19 @@ namespace PKHUD
                 {
                     FrameView.Alpha = 0;
                     HideBackgroundView();
-                }, (finished) =>
+                }, _ =>
                 {
                     Hidden = true;
 
                     RemoveFromSuperview();
 
-                    completion?.Invoke(finished);
+                    completion?.Invoke();
                 });
             }
             else
             {
                 FrameView.Alpha = 0;
-                completion?.Invoke(true);
+                completion?.Invoke();
             }
         }
 

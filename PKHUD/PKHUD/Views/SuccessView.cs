@@ -30,39 +30,38 @@ using CoreGraphics;
 using Foundation;
 using UIKit;
 
-namespace PKHUD
+namespace PKHUD.Views
 {
     /// <summary>
     /// Provides an animated success (checkmark) view.
     /// </summary>
-    public class SuccessView : SquareBaseView, IAnimatable
+    public class SuccessView : SquareBaseView, IAnimation
     {
-        protected CAShapeLayer CheckmarkShapeLayer { get; private set; }
+        private CAShapeLayer _checkmarkShapeLayer;
 
-        public SuccessView(string title = default(string), string subtitle = default(string)) : base(null, title,
-            subtitle)
+        public SuccessView()
         {
             Initialize();
         }
 
         public SuccessView(NSCoder coder) : base(coder)
         {
-            Initialize();
+            /* Required constructor */
         }
 
         public SuccessView(IntPtr handle) : base(handle)
         {
-            Initialize();
+            /* Required constructor */
         }
 
-        protected void Initialize()
+        private void Initialize()
         {
             var checkmarkPath = new UIBezierPath();
             checkmarkPath.MoveTo(new CGPoint(4, 27));
             checkmarkPath.AddLineTo(new CGPoint(34, 56));
             checkmarkPath.AddLineTo(new CGPoint(88, 0));
 
-            CheckmarkShapeLayer = new CAShapeLayer
+            _checkmarkShapeLayer = new CAShapeLayer
             {
                 Frame = new CGRect(3, 3, 88, 56),
                 Path = checkmarkPath.CGPath,
@@ -74,9 +73,9 @@ namespace PKHUD
                 LineWidth = 6
             };
 
-            Layer.AddSublayer(CheckmarkShapeLayer);
+            Layer.AddSublayer(_checkmarkShapeLayer);
 
-            CheckmarkShapeLayer.Position = Layer.Position;
+            _checkmarkShapeLayer.Position = Layer.Position;
         }
 
         public void StartAnimation()
@@ -86,12 +85,12 @@ namespace PKHUD
             checkmarkStrokeAnimation.KeyTimes = new[] {new NSNumber(0), new NSNumber(1)};
             checkmarkStrokeAnimation.Duration = .35f;
 
-            CheckmarkShapeLayer.AddAnimation(checkmarkStrokeAnimation, "checkmarkStrokeAnimation");
+            _checkmarkShapeLayer.AddAnimation(checkmarkStrokeAnimation, "checkmarkStrokeAnimation");
         }
 
         public void StopAnimation()
         {
-            CheckmarkShapeLayer.RemoveAnimation("checkmarkStrokeAnimation");
+            _checkmarkShapeLayer.RemoveAnimation("checkmarkStrokeAnimation");
         }
     }
 }

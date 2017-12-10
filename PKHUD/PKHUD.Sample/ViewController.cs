@@ -76,46 +76,55 @@ namespace PKHUD.Sample
 
         private static void AnimatedSuccessButtonOnTouchUpInside(object sender, EventArgs e)
         {
-            HUD.Flash(ContentFactory.CreateSuccessContent(), TimeSpan.FromSeconds(2));
+            ContentBuilder.WithSuccessContent().Build().Flash(TimeSpan.FromSeconds(2));
         }
 
         private static void AnimatedErrorButtonOnTouchUpInside(object sender, EventArgs e)
         {
-            HUD.Show(ContentFactory.CreateErrorContent());
-            HUD.Hide(TimeSpan.FromSeconds(2));
+            var hud = ContentBuilder.WithErrorContent().Build();
+            hud.Show();
+            hud.HideWithDelay(TimeSpan.FromSeconds(2));
         }
 
         private static async void AnimatedProgressButtonOnTouchUpInside(object sender, EventArgs e)
         {
-            HUD.Show(ContentFactory.CreateProgressContent());
-
+            ContentBuilder.WithProgressContent()
+                .WithBackgroundDimming(true)
+                .Build()
+                .Show();
+            
             await Task.Delay(TimeSpan.FromSeconds(2));
-
-            HUD.Flash(ContentFactory.CreateSuccessContent(), TimeSpan.FromSeconds(1));
+            
+            ContentBuilder.WithSuccessContent()
+                .Build()
+                .Flash(TimeSpan.FromSeconds(1));
+        }
+        
+        private static void GraceAnimatedProgressButtonOnTouchUpInside(object sender, EventArgs e)
+        {
+            ContentBuilder.WithProgressContent()
+                .WithGracePeriod(TimeSpan.FromSeconds(2))
+                .Build()
+                .Flash(TimeSpan.FromSeconds(1));
         }
 
         private static void AnimatedStatusProgressButtonOnTouchUpInside(object sender, EventArgs e)
         {
-            HUD.Flash(ContentFactory.CreateProgressContent("Title", "Subtitle"), TimeSpan.FromSeconds(2));
+            ContentBuilder.WithProgressContent()
+                .WithTitle("Title")
+                .WithSubtitle("Subtitle")
+                .Build()
+                .Flash(TimeSpan.FromSeconds(2));
         }
 
-        private static async void GraceAnimatedStatusProgressButtonOnTouchUpInside(object sender, EventArgs e)
+        private static async void TextButtonOnTouchUpInside(object sender, EventArgs e)
         {
-            PKHUD.Instance.GracePeriod = TimeSpan.FromSeconds(1);
+            await ContentBuilder.WithLabelContent()
+                .WithTitle("Requesting Licence…")
+                .Build()
+                .FlashAsync(TimeSpan.FromSeconds(2));
 
-            HUD.Show(ContentFactory.CreateProgressContent("Title", "Subtitle"));
-
-            await Task.Delay(TimeSpan.FromSeconds(2));
-
-            HUD.Hide(true);
-
-            PKHUD.Instance.GracePeriod = TimeSpan.Zero;
-        }
-
-        private static void TextButtonOnTouchUpInside(object sender, EventArgs e)
-        {
-            HUD.Flash(ContentFactory.CreateLabelContent("Requesting Licence…"), TimeSpan.FromSeconds(2),
-                completed => { Debug.WriteLine("License Obtained"); });
+            Debug.WriteLine("License Obtained");
         }
 
         protected override void Dispose(bool disposing)
@@ -125,7 +134,7 @@ namespace PKHUD.Sample
                 AnimatedSuccessButton.TouchUpInside -= AnimatedSuccessButtonOnTouchUpInside;
                 AnimatedErrorButton.TouchUpInside -= AnimatedErrorButtonOnTouchUpInside;
                 AnimatedProgressButton.TouchUpInside -= AnimatedProgressButtonOnTouchUpInside;
-                GraceAnimatedProgressButton.TouchUpInside -= GraceAnimatedStatusProgressButtonOnTouchUpInside;
+                GraceAnimatedProgressButton.TouchUpInside -= GraceAnimatedProgressButtonOnTouchUpInside;
                 AnimatedStatusProgressButton.TouchUpInside -= AnimatedStatusProgressButtonOnTouchUpInside;
                 TextButton.TouchUpInside -= TextButtonOnTouchUpInside;
             }
@@ -136,10 +145,7 @@ namespace PKHUD.Sample
         public override void ViewDidLoad()
         {
             base.ViewDidLoad();
-
-            HUD.DimsBackground = false;
-            HUD.AllowsInteraction = false;
-
+            
             View.BackgroundColor = UIColor.White;
 
             BackgroundImage = new UIImageView
@@ -166,7 +172,7 @@ namespace PKHUD.Sample
             AnimatedProgressButton.TouchUpInside += AnimatedProgressButtonOnTouchUpInside;
 
             GraceAnimatedProgressButton = CreateButton("Grace Animated Progress HUD");
-            GraceAnimatedProgressButton.TouchUpInside += GraceAnimatedStatusProgressButtonOnTouchUpInside;
+            GraceAnimatedProgressButton.TouchUpInside += GraceAnimatedProgressButtonOnTouchUpInside;
 
             AnimatedStatusProgressButton = CreateButton("Animated Status Progress HUD");
             AnimatedStatusProgressButton.TouchUpInside += AnimatedStatusProgressButtonOnTouchUpInside;

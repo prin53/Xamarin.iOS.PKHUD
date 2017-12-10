@@ -30,18 +30,24 @@ using CoreGraphics;
 using Foundation;
 using UIKit;
 
-namespace PKHUD
+namespace PKHUD.Views
 {
     /// <summary>
     /// Provides an animated error (cross) view.
     /// </summary>
-    public class ErrorView : SquareBaseView, IAnimatable
+    public class ErrorView : SquareBaseView, IAnimation
     {
-        protected CAShapeLayer DashOneLayer { get; private set; }
+        private CAShapeLayer _dashOneLayer;
+        private CAShapeLayer _dashTwoLayer;
 
-        protected CAShapeLayer DashTwoLayer { get; private set; }
+        public override UIImage Image
+        {
+            get => null;
+            // ReSharper disable once ValueParameterNotUsed
+            set => base.Image = null;
+        }
 
-        protected static Func<CAShapeLayer> DashLayerFactory => () =>
+        private static Func<CAShapeLayer> DashLayerFactory => () =>
         {
             var path = new UIBezierPath();
             path.MoveTo(new CGPoint(0, 44));
@@ -60,7 +66,7 @@ namespace PKHUD
             };
         };
 
-        protected static Func<float, CABasicAnimation> RotationAnimationFactory => angle =>
+        private static Func<float, CABasicAnimation> RotationAnimationFactory => angle =>
         {
             CABasicAnimation animation;
             if (UIDevice.CurrentDevice.CheckSystemVersion(9, 0))
@@ -93,45 +99,44 @@ namespace PKHUD
 
         public ErrorView(NSCoder coder) : base(coder)
         {
-            Initialize();
+            /* Required constructor */
         }
 
         public ErrorView(IntPtr handle) : base(handle)
         {
-            Initialize();
+            /* Required constructor */
         }
 
-        public ErrorView(string title = default(string), string subtitle = default(string)) : base(null, title,
-            subtitle)
+        public ErrorView()
         {
             Initialize();
         }
 
-        protected void Initialize()
+        private void Initialize()
         {
-            DashOneLayer = DashLayerFactory();
-            DashTwoLayer = DashLayerFactory();
+            _dashOneLayer = DashLayerFactory();
+            _dashTwoLayer = DashLayerFactory();
 
-            Layer.AddSublayer(DashOneLayer);
-            Layer.AddSublayer(DashTwoLayer);
+            Layer.AddSublayer(_dashOneLayer);
+            Layer.AddSublayer(_dashTwoLayer);
 
-            DashOneLayer.Position = Layer.Position;
-            DashTwoLayer.Position = Layer.Position;
+            _dashOneLayer.Position = Layer.Position;
+            _dashTwoLayer.Position = Layer.Position;
         }
 
         public void StartAnimation()
         {
-            DashOneLayer.Transform = CATransform3D.MakeRotation(-45 * (float) (Math.PI / 180), 0, 0, 1);
-            DashTwoLayer.Transform = CATransform3D.MakeRotation(45 * (float) (Math.PI / 180), 0, 0, 1);
+            _dashOneLayer.Transform = CATransform3D.MakeRotation(-45 * (float) (Math.PI / 180), 0, 0, 1);
+            _dashTwoLayer.Transform = CATransform3D.MakeRotation(45 * (float) (Math.PI / 180), 0, 0, 1);
 
-            DashOneLayer.AddAnimation(RotationAnimationFactory(-45), "dashOneAnimation");
-            DashTwoLayer.AddAnimation(RotationAnimationFactory(45), "dashTwoAnimation");
+            _dashOneLayer.AddAnimation(RotationAnimationFactory(-45), "dashOneAnimation");
+            _dashTwoLayer.AddAnimation(RotationAnimationFactory(45), "dashTwoAnimation");
         }
 
         public void StopAnimation()
         {
-            DashOneLayer.RemoveAnimation("dashOneAnimation");
-            DashTwoLayer.RemoveAnimation("dashTwoAnimation");
+            _dashOneLayer.RemoveAnimation("dashOneAnimation");
+            _dashTwoLayer.RemoveAnimation("dashTwoAnimation");
         }
     }
 }

@@ -48,7 +48,7 @@ namespace PKHUD
         {
             var animation = CAKeyFrameAnimation.FromKeyPath("transform.rotation.z");
             {
-                animation.Values = new[]
+                animation.Values = new NSObject[]
                 {
                     new NSNumber(0f),
                     new NSNumber(1f * Math.PI / 6f),

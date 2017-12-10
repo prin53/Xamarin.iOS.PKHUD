@@ -29,11 +29,27 @@ using CoreGraphics;
 using Foundation;
 using UIKit;
 
-namespace PKHUD
+namespace PKHUD.Views
 {
     public class TextView : WideBaseView
     {
         private const int Padding = 10;
+        
+        private string _title;
+        
+        public virtual string Title
+        {
+            get => _title;
+            set
+            {
+                _title = value;
+
+                if (TitleLabel != null)
+                {
+                    TitleLabel.Text = _title;
+                }
+            }
+        }
 
         protected UILabel TitleLabel { get; private set; }
 
@@ -48,17 +64,17 @@ namespace PKHUD
 
         public TextView(NSCoder coder) : base(coder)
         {
-            Initialize();
+            /* Required constructor */
         }
 
         public TextView(IntPtr handle) : base(handle)
         {
-            Initialize();
+            /* Required constructor */
         }
 
-        public TextView(string text)
+        public TextView()
         {
-            Initialize(text);
+            Initialize();
         }
 
         public override void LayoutSubviews()
@@ -73,7 +89,7 @@ namespace PKHUD
             TitleLabel.Frame = Bounds.Inset(Padding, Padding);
         }
 
-        protected void Initialize(string text = default(string))
+        private void Initialize()
         {
             TitleLabel = TitleLabelFactory();
 
@@ -82,7 +98,7 @@ namespace PKHUD
                 throw new InvalidOperationException($"{nameof(TitleLabelFactory)} must produce a valid view");
             }
 
-            TitleLabel.Text = text;
+            TitleLabel.Text = Title;
 
             AddSubview(TitleLabel);
         }

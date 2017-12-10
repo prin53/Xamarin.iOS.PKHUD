@@ -29,14 +29,60 @@ using CoreGraphics;
 using Foundation;
 using UIKit;
 
-namespace PKHUD
+namespace PKHUD.Views
 {
     /// <summary>
     /// Provides a square view, which can be subclassed with additional views.
     /// </summary>
     public class SquareBaseView : UIView
     {
-        public static CGRect DefaultSquareBaseViewFrame { get; }
+        private static readonly CGRect DefaultSquareBaseViewFrame;
+
+        private string _title;
+        private string _subtitle;
+        private UIImage _image;
+
+        public virtual string Title
+        {
+            get => _title;
+            set
+            {
+                _title = value;
+
+                if (TitleLabel != null)
+                {
+                    TitleLabel.Text = _title;
+                }
+            }
+        }
+
+        public virtual string Subtitle
+        {
+            get => _subtitle;
+            set
+            {
+                _subtitle = value;
+
+                if (SubtitleLabel != null)
+                {
+                    SubtitleLabel.Text = _subtitle;
+                }
+            }
+        }
+
+        public virtual UIImage Image
+        {
+            get => _image;
+            set
+            {
+                _image = value;
+
+                if (ImageView != null)
+                {
+                    ImageView.Image = _image;
+                }
+            }
+        }
 
         static SquareBaseView()
         {
@@ -69,15 +115,15 @@ namespace PKHUD
             MinimumScaleFactor = .25f
         };
 
-        public UIImageView ImageView { get; private set; }
+        protected UIImageView ImageView { get; private set; }
 
-        public UILabel TitleLabel { get; private set; }
+        protected UILabel TitleLabel { get; private set; }
 
-        public UILabel SubtitleLabel { get; private set; }
+        protected UILabel SubtitleLabel { get; private set; }
 
         public SquareBaseView(CGRect frame) : base(frame)
         {
-            /* Required constructor */
+            Initialize();
         }
 
         public SquareBaseView(NSCoder coder) : base(coder)
@@ -90,14 +136,12 @@ namespace PKHUD
             /* Required constructor */
         }
 
-        public SquareBaseView(UIImage image = default(UIImage), string title = default(string),
-            string subtitle = default(string)) : base(DefaultSquareBaseViewFrame)
+        public SquareBaseView() : base(DefaultSquareBaseViewFrame)
         {
-            Initialize(image, title, subtitle);
+            Initialize();
         }
 
-        protected void Initialize(UIImage image = default(UIImage), string title = default(string),
-            string subtitle = default(string))
+        private void Initialize()
         {
             ImageView = ImageViewFactory();
 
@@ -120,9 +164,9 @@ namespace PKHUD
                 throw new InvalidOperationException($"{nameof(SubtitleLabelFactory)} must produce a valid view");
             }
 
-            ImageView.Image = image;
-            TitleLabel.Text = title;
-            SubtitleLabel.Text = subtitle;
+            ImageView.Image = Image;
+            TitleLabel.Text = Title;
+            SubtitleLabel.Text = Subtitle;
 
             AddSubviews(ImageView, TitleLabel, SubtitleLabel);
         }

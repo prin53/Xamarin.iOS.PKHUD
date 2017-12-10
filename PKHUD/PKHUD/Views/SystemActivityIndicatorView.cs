@@ -29,12 +29,12 @@ using CoreGraphics;
 using Foundation;
 using UIKit;
 
-namespace PKHUD
+namespace PKHUD.Views
 {
     /// <summary>
     /// Provides the system UIActivityIndicatorView as an alternative.
     /// </summary>
-    public class SystemActivityIndicatorView : WideBaseView, IAnimatable
+    public class SystemActivityIndicatorView : WideBaseView, IAnimation
     {
         protected UIActivityIndicatorView ActivityIndicatorView { get; private set; }
 
@@ -56,12 +56,28 @@ namespace PKHUD
 
         public SystemActivityIndicatorView(NSCoder coder) : base(coder)
         {
-            Initialize();
+            /* Required constructor */
         }
 
         public SystemActivityIndicatorView(IntPtr handle) : base(handle)
         {
-            Initialize();
+            /* Required constructor */
+        }
+
+        private void Initialize()
+        {
+            BackgroundColor = UIColor.Clear;
+
+            Alpha = .8f;
+
+            ActivityIndicatorView = ActivityIndicatorViewFactory();
+
+            if (ActivityIndicatorView == null)
+            {
+                throw new InvalidOperationException($"{nameof(ActivityIndicatorViewFactory)} must produce a valid view");
+            }
+
+            AddSubview(ActivityIndicatorView);
         }
 
         public override void LayoutSubviews()
@@ -84,23 +100,6 @@ namespace PKHUD
         public void StopAnimation()
         {
             /* Nothing to do */
-        }
-
-        protected void Initialize()
-        {
-            BackgroundColor = UIColor.Clear;
-
-            Alpha = .8f;
-
-            ActivityIndicatorView = ActivityIndicatorViewFactory();
-
-            if (ActivityIndicatorView == null)
-            {
-                throw new InvalidOperationException(
-                    $"{nameof(ActivityIndicatorViewFactory)} must produce a valid view");
-            }
-
-            AddSubview(ActivityIndicatorView);
         }
     }
 }
