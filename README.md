@@ -1,6 +1,7 @@
 [![NuGet version](https://badge.fury.io/nu/Prin53.Xamarin.iOS.PKHUD.svg)](https://badge.fury.io/nu/Prin53.Xamarin.iOS.PKHUD)
 ## Xamarin.iOS port for [PKHUD](https://github.com/pkluz/PKHUD) Swift library
 A **Xamarin.iOS** based reimplementation of the Apple HUD (Volume, Ringer, Rotation,…) **for iOS 8** and up.
+![ScreenShot](https://raw.githubusercontent.com/Prin53/Xamarin.iOS.PKHUD/develop/ScreenShot.png)
 ## Features
 - Official iOS 8 blur effect via **UIVisualEffectsView**.
 - Proper **rotation support**.
