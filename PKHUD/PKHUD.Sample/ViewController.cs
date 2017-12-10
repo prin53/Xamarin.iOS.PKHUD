@@ -76,33 +76,36 @@ namespace PKHUD.Sample
 
         private static void AnimatedSuccessButtonOnTouchUpInside(object sender, EventArgs e)
         {
-            ContentBuilder.WithSuccessContent().Build().Flash(TimeSpan.FromSeconds(2));
+            Hud.Create()
+                .WithSuccessContent()
+                .Build()
+                .Flash(TimeSpan.FromSeconds(2));
         }
 
         private static void AnimatedErrorButtonOnTouchUpInside(object sender, EventArgs e)
         {
-            var hud = ContentBuilder.WithErrorContent().Build();
+            var hud = Hud.Create().WithErrorContent().Build();
             hud.Show();
             hud.HideWithDelay(TimeSpan.FromSeconds(2));
         }
 
         private static async void AnimatedProgressButtonOnTouchUpInside(object sender, EventArgs e)
         {
-            ContentBuilder.WithProgressContent()
+            Hud.Create().WithProgressContent()
                 .WithBackgroundDimming(true)
                 .Build()
                 .Show();
-            
+
             await Task.Delay(TimeSpan.FromSeconds(2));
-            
-            ContentBuilder.WithSuccessContent()
+
+            Hud.Create().WithSuccessContent()
                 .Build()
                 .Flash(TimeSpan.FromSeconds(1));
         }
-        
+
         private static void GraceAnimatedProgressButtonOnTouchUpInside(object sender, EventArgs e)
         {
-            ContentBuilder.WithProgressContent()
+            Hud.Create().WithProgressContent()
                 .WithGracePeriod(TimeSpan.FromSeconds(2))
                 .Build()
                 .Flash(TimeSpan.FromSeconds(1));
@@ -110,7 +113,7 @@ namespace PKHUD.Sample
 
         private static void AnimatedStatusProgressButtonOnTouchUpInside(object sender, EventArgs e)
         {
-            ContentBuilder.WithProgressContent()
+            Hud.Create().WithProgressContent()
                 .WithTitle("Title")
                 .WithSubtitle("Subtitle")
                 .Build()
@@ -119,7 +122,7 @@ namespace PKHUD.Sample
 
         private static async void TextButtonOnTouchUpInside(object sender, EventArgs e)
         {
-            await ContentBuilder.WithLabelContent()
+            await Hud.Create().WithLabelContent()
                 .WithTitle("Requesting Licence…")
                 .Build()
                 .FlashAsync(TimeSpan.FromSeconds(2));
@@ -145,7 +148,7 @@ namespace PKHUD.Sample
         public override void ViewDidLoad()
         {
             base.ViewDidLoad();
-            
+
             View.BackgroundColor = UIColor.White;
 
             BackgroundImage = new UIImageView

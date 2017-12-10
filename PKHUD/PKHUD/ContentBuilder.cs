@@ -31,42 +31,42 @@ namespace PKHUD
 {
     public class ContentBuilder
     {
-        public static Builder WithContent(UIView content)
+        public Builder WithContent(UIView content)
         {
             return new Builder(content);
         }
         
-        public static Builder WithSquareContent()
+        public Builder WithSquareContent()
         {
             return new Builder(new SquareBaseView());
         }
         
-        public static Builder WithRotatingSquareContent()
+        public Builder WithRotatingSquareContent()
         {
             return new Builder(new RotatingImageView());
         }
 
-        public static Builder WithSuccessContent()
+        public Builder WithSuccessContent()
         {
             return new Builder(new SuccessView());
         }
 
-        public static Builder WithErrorContent()
+        public Builder WithErrorContent()
         {
             return new Builder(new ErrorView());
         }
         
-        public static Builder WithProgressContent()
+        public Builder WithProgressContent()
         {
             return new Builder(new ProgressView());
         }
         
-        public static Builder WithSystemActivityContent()
+        public Builder WithSystemActivityContent()
         {
             return new Builder(new SystemActivityIndicatorView());
         }
         
-        public static Builder WithLabelContent()
+        public Builder WithLabelContent()
         {
             return new Builder(new TextView());
         }
