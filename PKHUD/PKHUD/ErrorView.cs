@@ -23,6 +23,7 @@
 // LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
+
 using System;
 using CoreAnimation;
 using CoreGraphics;
@@ -31,105 +32,106 @@ using UIKit;
 
 namespace PKHUD
 {
-	/// <summary>
-	/// Provides an animated error (cross) view.
-	/// </summary>
-	public class ErrorView : SquareBaseView, IAnimatable
-	{
-		protected CAShapeLayer DashOneLayer { get; private set; }
+    /// <summary>
+    /// Provides an animated error (cross) view.
+    /// </summary>
+    public class ErrorView : SquareBaseView, IAnimatable
+    {
+        protected CAShapeLayer DashOneLayer { get; private set; }
 
-		protected CAShapeLayer DashTwoLayer { get; private set; }
+        protected CAShapeLayer DashTwoLayer { get; private set; }
 
-		protected Func<CAShapeLayer> DashLayerFactory => () =>
-		{
-			var path = new UIBezierPath();
-			path.MoveTo(new CGPoint(0, 44));
-			path.AddLineTo(new CGPoint(88, 44));
+        protected static Func<CAShapeLayer> DashLayerFactory => () =>
+        {
+            var path = new UIBezierPath();
+            path.MoveTo(new CGPoint(0, 44));
+            path.AddLineTo(new CGPoint(88, 44));
 
-			return new CAShapeLayer
-			{
-				Frame = new CGRect(CGPoint.Empty, new CGSize(88, 88)),
-				Path = path.CGPath,
-				LineCap = CAShapeLayer.CapRound,
-				LineJoin = CAShapeLayer.JoinRound,
-				FillColor = null,
-				StrokeColor = UIColor.FromRGB(.15f, .15f, .15f).CGColor,
-				LineWidth = 6,
-				FillMode = CAFillMode.Forwards
-			};
-		};
+            return new CAShapeLayer
+            {
+                Frame = new CGRect(CGPoint.Empty, new CGSize(88, 88)),
+                Path = path.CGPath,
+                LineCap = CAShapeLayer.CapRound,
+                LineJoin = CAShapeLayer.JoinRound,
+                FillColor = null,
+                StrokeColor = UIColor.FromRGB(.15f, .15f, .15f).CGColor,
+                LineWidth = 6,
+                FillMode = CAFillMode.Forwards
+            };
+        };
 
-		protected Func<float, CABasicAnimation> RotationAnimationFactory => (angle) =>
-		{
-			CABasicAnimation animation;
-			if (UIDevice.CurrentDevice.CheckSystemVersion(9, 0))
-			{
-				var springAnimation = (CASpringAnimation)CASpringAnimation.FromKeyPath("transform.rotation.z");
-				{
-					springAnimation.Damping = 1.5f;
-					springAnimation.Mass = .22f;
-					springAnimation.InitialVelocity = .5f;
-				}
-				animation = springAnimation;
-			}
-			else
-			{
-				animation = CABasicAnimation.FromKeyPath("transform.rotation.z");
-			}
+        protected static Func<float, CABasicAnimation> RotationAnimationFactory => angle =>
+        {
+            CABasicAnimation animation;
+            if (UIDevice.CurrentDevice.CheckSystemVersion(9, 0))
+            {
+                var springAnimation = (CASpringAnimation) CASpringAnimation.FromKeyPath("transform.rotation.z");
+                {
+                    springAnimation.Damping = 1.5f;
+                    springAnimation.Mass = .22f;
+                    springAnimation.InitialVelocity = .5f;
+                }
+                animation = springAnimation;
+            }
+            else
+            {
+                animation = CABasicAnimation.FromKeyPath("transform.rotation.z");
+            }
 
-			animation.From = new NSNumber(0);
-			animation.To = new NSNumber(angle * (float)(Math.PI / 180));
-			animation.Duration = 1;
-			animation.TimingFunction = CAMediaTimingFunction.FromName(CAMediaTimingFunction.EaseInEaseOut);
+            animation.From = new NSNumber(0);
+            animation.To = new NSNumber(angle * (float) (Math.PI / 180));
+            animation.Duration = 1;
+            animation.TimingFunction = CAMediaTimingFunction.FromName(CAMediaTimingFunction.EaseInEaseOut);
 
-			return animation;
-		};
+            return animation;
+        };
 
-		public ErrorView(CGRect frame) : base(frame)
-		{
-			Initialize();
-		}
+        public ErrorView(CGRect frame) : base(frame)
+        {
+            Initialize();
+        }
 
-		public ErrorView(NSCoder coder) : base(coder)
-		{
-			Initialize();
-		}
+        public ErrorView(NSCoder coder) : base(coder)
+        {
+            Initialize();
+        }
 
-		public ErrorView(IntPtr handle) : base(handle)
-		{
-			Initialize();
-		}
+        public ErrorView(IntPtr handle) : base(handle)
+        {
+            Initialize();
+        }
 
-		public ErrorView(string title = default(string), string subtitle = default(string)) : base(null, title, subtitle)
-		{
-			Initialize();
-		}
+        public ErrorView(string title = default(string), string subtitle = default(string)) : base(null, title,
+            subtitle)
+        {
+            Initialize();
+        }
 
-		protected void Initialize()
-		{
-			DashOneLayer = DashLayerFactory();
-			DashTwoLayer = DashLayerFactory();
+        protected void Initialize()
+        {
+            DashOneLayer = DashLayerFactory();
+            DashTwoLayer = DashLayerFactory();
 
-			Layer.AddSublayer(DashOneLayer);
-			Layer.AddSublayer(DashTwoLayer);
+            Layer.AddSublayer(DashOneLayer);
+            Layer.AddSublayer(DashTwoLayer);
 
-			DashOneLayer.Position = Layer.Position;
-			DashTwoLayer.Position = Layer.Position;
-		}
+            DashOneLayer.Position = Layer.Position;
+            DashTwoLayer.Position = Layer.Position;
+        }
 
-		public void StartAnimation()
-		{
-			DashOneLayer.Transform = CATransform3D.MakeRotation(-45 * (float)(Math.PI / 180), 0, 0, 1);
-			DashTwoLayer.Transform = CATransform3D.MakeRotation(45 * (float)(Math.PI / 180), 0, 0, 1);
+        public void StartAnimation()
+        {
+            DashOneLayer.Transform = CATransform3D.MakeRotation(-45 * (float) (Math.PI / 180), 0, 0, 1);
+            DashTwoLayer.Transform = CATransform3D.MakeRotation(45 * (float) (Math.PI / 180), 0, 0, 1);
 
-			DashOneLayer.AddAnimation(RotationAnimationFactory(-45), "dashOneAnimation");
-			DashTwoLayer.AddAnimation(RotationAnimationFactory(45), "dashTwoAnimation");
-		}
+            DashOneLayer.AddAnimation(RotationAnimationFactory(-45), "dashOneAnimation");
+            DashTwoLayer.AddAnimation(RotationAnimationFactory(45), "dashTwoAnimation");
+        }
 
-		public void StopAnimation()
-		{
-			DashOneLayer.RemoveAnimation("dashOneAnimation");
-			DashTwoLayer.RemoveAnimation("dashTwoAnimation");
-		}
-	}
+        public void StopAnimation()
+        {
+            DashOneLayer.RemoveAnimation("dashOneAnimation");
+            DashTwoLayer.RemoveAnimation("dashTwoAnimation");
+        }
+    }
 }

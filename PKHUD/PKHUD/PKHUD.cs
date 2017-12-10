@@ -23,6 +23,7 @@
 // LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
+
 using System;
 using System.Linq;
 using CoreGraphics;
@@ -31,155 +32,132 @@ using UIKit;
 
 namespace PKHUD
 {
-	public class PKHUD : NSObject
-	{
-		private NSObject _willEnterForegroundNotificationObserver;
+    public class PKHUD : NSObject
+    {
+        private readonly NSObject _willEnterForegroundNotificationObserver;
+        private readonly ContainerView _container;
+        
+        private NSTimer _timer;
 
-		private ContainerView _container;
-		private NSTimer _timer;
+        public static PKHUD Instance { get; } = new PKHUD();
 
-		public static PKHUD Instance { get; } = new PKHUD();
+        public UIView ViewToPresentOn { get; }
 
-		public UIView ViewToPresentOn { get; }
+        public bool DimsBackground { get; set; }
 
-		public bool DimsBackground { get; set; }
+        public UIView ContentView
+        {
+            get => _container.FrameView.Content;
+            set
+            {
+                _container.FrameView.Content = value;
 
-		public UIView ContentView
-		{
-			get
-			{
-				return _container.FrameView.Content;
-			}
-			set
-			{
-				_container.FrameView.Content = value;
+                StartAnimatingContentView();
+            }
+        }
 
-				StartAnimatingContentView();
-			}
-		}
+        public UIVisualEffect Effect
+        {
+            get => _container.FrameView.Effect;
+            set => _container.FrameView.Effect = value;
+        }
 
-		public UIVisualEffect Effect
-		{
-			get
-			{
-				return _container.FrameView.Effect;
-			}
-			set
-			{
-				_container.FrameView.Effect = value;
-			}
-		}
+        public bool UserInteractionOnUnderlyingViewsEnabled
+        {
+            get => !_container.UserInteractionEnabled;
+            set => _container.UserInteractionEnabled = !value;
+        }
 
-		public bool UserInteractionOnUnderlyingViewsEnabled
-		{
-			get
-			{
-				return !_container.UserInteractionEnabled;
-			}
-			set
-			{
-				_container.UserInteractionEnabled = !value;
-			}
-		}
+        public bool IsVisible => !_container.Hidden;
 
-		public bool IsVisible => !_container.Hidden;
+        public PKHUD()
+        {
+            _willEnterForegroundNotificationObserver = NSNotificationCenter.DefaultCenter.AddObserver(
+                UIApplication.WillEnterForegroundNotification,
+                WillEnterForeground
+            );
 
-		public PKHUD()
-		{
-			_willEnterForegroundNotificationObserver = NSNotificationCenter.DefaultCenter.AddObserver(
-				UIApplication.WillEnterForegroundNotification,
-				WillEnterForeground
-			);
+            _container = new ContainerView
+            {
+                FrameView =
+                {
+                    AutoresizingMask = UIViewAutoresizing.FlexibleLeftMargin
+                                       | UIViewAutoresizing.FlexibleRightMargin
+                                       | UIViewAutoresizing.FlexibleTopMargin
+                                       | UIViewAutoresizing.FlexibleBottomMargin
+                }
+            };
 
-			_container = new ContainerView();
-			_container.FrameView.AutoresizingMask = UIViewAutoresizing.FlexibleLeftMargin
-				| UIViewAutoresizing.FlexibleRightMargin
-				| UIViewAutoresizing.FlexibleTopMargin
-				| UIViewAutoresizing.FlexibleBottomMargin;
+            DimsBackground = true;
+            UserInteractionOnUnderlyingViewsEnabled = false;
+        }
 
-			DimsBackground = true;
-			UserInteractionOnUnderlyingViewsEnabled = false;
-		}
+        public PKHUD(UIView view) : this()
+        {
+            ViewToPresentOn = view ?? throw new ArgumentNullException(nameof(view));
+        }
 
-		public PKHUD(UIView view) : this()
-		{
-			if (view == null)
-			{
-				throw new ArgumentNullException(nameof(view));
-			}
+        private void WillEnterForeground(NSNotification notification)
+        {
+            StartAnimatingContentView();
+        }
 
-			ViewToPresentOn = view;
-		}
+        protected override void Dispose(bool disposing)
+        {
+            if (disposing)
+            {
+                NSNotificationCenter.DefaultCenter.RemoveObserver(_willEnterForegroundNotificationObserver);
+            }
 
-		private void WillEnterForeground(NSNotification notification)
-		{
-			StartAnimatingContentView();
-		}
+            base.Dispose(disposing);
+        }
 
-		protected override void Dispose(bool disposing)
-		{
-			if (disposing)
-			{
-				NSNotificationCenter.DefaultCenter.RemoveObserver(_willEnterForegroundNotificationObserver);
-			}
+        public virtual void Show(UIView onView = default(UIView))
+        {
+            var view = onView ?? ViewToPresentOn ?? UIApplication.SharedApplication.KeyWindow;
 
-			base.Dispose(disposing);
-		}
+            if (!view.Subviews.Contains(_container))
+            {
+                view.AddSubview(_container);
 
-		public virtual void Show(UIView onView = default(UIView))
-		{
-			var view = onView ?? ViewToPresentOn ?? UIApplication.SharedApplication.KeyWindow;
+                _container.Frame = new CGRect(CGPoint.Empty, view.Frame.Size);
+                _container.AutoresizingMask = UIViewAutoresizing.FlexibleWidth | UIViewAutoresizing.FlexibleHeight;
+            }
 
-			if (!view.Subviews.Contains(_container))
-			{
-				view.AddSubview(_container);
+            _container.ShowFrameView();
 
-				_container.Frame = new CGRect(CGPoint.Empty, view.Frame.Size);
-				_container.AutoresizingMask = UIViewAutoresizing.FlexibleWidth | UIViewAutoresizing.FlexibleHeight;
-			}
+            if (DimsBackground)
+            {
+                _container.ShowBackgroundView(true);
+            }
 
-			_container.ShowFrameView();
+            StartAnimatingContentView();
+        }
 
-			if (DimsBackground)
-			{
-				_container.ShowBackgroundView(true);
-			}
+        public virtual void Hide(bool animated = true, Action<bool> completion = default(Action<bool>))
+        {
+            _container.HideFrameView(animated, completion);
 
-			StartAnimatingContentView();
-		}
+            StopAnimatingContentView();
+        }
 
-		public virtual void Hide(bool animated = true, Action<bool> completion = default(Action<bool>))
-		{
-			_container.HideFrameView(animated, completion);
+        public virtual void Hide(TimeSpan delay, bool animated = true, Action<bool> completion = default(Action<bool>))
+        {
+            _timer = NSTimer.CreateScheduledTimer(delay, _ =>
+            {
+                Hide(animated, completion);
+                _timer.Invalidate();
+            });
+        }
 
-			StopAnimatingContentView();
-		}
+        protected virtual void StartAnimatingContentView()
+        {
+            (ContentView as IAnimatable)?.StartAnimation();
+        }
 
-		public virtual void Hide(TimeSpan delay, bool animated = true, Action<bool> completion = default(Action<bool>))
-		{
-			_timer = NSTimer.CreateScheduledTimer(delay, _ =>
-			{
-				Hide(animated, completion);
-				_timer.Invalidate();
-			});
-		}
-
-		protected virtual void StartAnimatingContentView()
-		{
-			var animatable = ContentView as IAnimatable;
-			if (animatable != null)
-			{
-				animatable.StartAnimation();
-			}
-		}
-
-		protected virtual void StopAnimatingContentView()
-		{
-			var animatable = ContentView as IAnimatable;
-			if (animatable != null)
-			{
-				animatable.StopAnimation();
-			}
-		}
-	}
+        protected virtual void StopAnimatingContentView()
+        {
+            (ContentView as IAnimatable)?.StopAnimation();
+        }
+    }
 }

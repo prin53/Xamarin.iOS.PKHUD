@@ -23,32 +23,32 @@
 // LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
+
 using Foundation;
 using UIKit;
 
 namespace PKHUD.Sample
 {
-	[Register("AppDelegate")]
-	public class AppDelegate : UIApplicationDelegate
-	{
-		public override UIWindow Window { get; set; }
+    [Register(nameof(AppDelegate))]
+    public class AppDelegate : UIApplicationDelegate
+    {
+        public override UIWindow Window { get; set; }
 
-		private static void Main(string[] args)
-		{
-			UIApplication.Main(args, null, "AppDelegate");
-		}
+        private static void Main(string[] args)
+        {
+            UIApplication.Main(args, null, nameof(AppDelegate));
+        }
 
-		public override bool FinishedLaunching(UIApplication application, NSDictionary launchOptions)
-		{
-			Window = new UIWindow(UIScreen.MainScreen.Bounds)
-			{
-				RootViewController = new ViewController()
-			};
+        public override bool FinishedLaunching(UIApplication application, NSDictionary launchOptions)
+        {
+            Window = new UIWindow(UIScreen.MainScreen.Bounds)
+            {
+                RootViewController = new ViewController()
+            };
 
-			Window.MakeKeyAndVisible();
+            Window.MakeKeyAndVisible();
 
-			return true;
-		}
-	}
+            return true;
+        }
+    }
 }
-

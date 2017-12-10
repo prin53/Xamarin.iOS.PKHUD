@@ -23,6 +23,7 @@
 // LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
+
 using System;
 using CoreGraphics;
 using Foundation;
@@ -30,77 +31,76 @@ using UIKit;
 
 namespace PKHUD
 {
-	/// <summary>
-	/// Provides the system UIActivityIndicatorView as an alternative.
-	/// </summary>
-	public class SystemActivityIndicatorView : WideBaseView, IAnimatable
-	{
-		protected UIActivityIndicatorView ActivityIndicatorView { get; private set; }
+    /// <summary>
+    /// Provides the system UIActivityIndicatorView as an alternative.
+    /// </summary>
+    public class SystemActivityIndicatorView : WideBaseView, IAnimatable
+    {
+        protected UIActivityIndicatorView ActivityIndicatorView { get; private set; }
 
-		protected virtual Func<UIActivityIndicatorView> ActivityIndicatorViewFactory => () =>
-		{
-			return new UIActivityIndicatorView(UIActivityIndicatorViewStyle.WhiteLarge)
-			{
-				Color = UIColor.Black
-			};
-		};
+        protected virtual Func<UIActivityIndicatorView> ActivityIndicatorViewFactory => ()
+            => new UIActivityIndicatorView(UIActivityIndicatorViewStyle.WhiteLarge)
+            {
+                Color = UIColor.Black
+            };
 
-		public SystemActivityIndicatorView()
-		{
-			Initialize();
-		}
+        public SystemActivityIndicatorView()
+        {
+            Initialize();
+        }
 
-		public SystemActivityIndicatorView(CGRect frame) : base(frame)
-		{	
-			Initialize();
-		}
+        public SystemActivityIndicatorView(CGRect frame) : base(frame)
+        {
+            Initialize();
+        }
 
-		public SystemActivityIndicatorView(NSCoder coder) : base(coder)
-		{
-			Initialize();
-		}
+        public SystemActivityIndicatorView(NSCoder coder) : base(coder)
+        {
+            Initialize();
+        }
 
-		public SystemActivityIndicatorView(IntPtr handle) : base(handle)
-		{
-			Initialize();
-		}
+        public SystemActivityIndicatorView(IntPtr handle) : base(handle)
+        {
+            Initialize();
+        }
 
-		public override void LayoutSubviews()
-		{
-			base.LayoutSubviews();
+        public override void LayoutSubviews()
+        {
+            base.LayoutSubviews();
 
-			if (ActivityIndicatorView == null)
-			{
-				return;
-			}
+            if (ActivityIndicatorView == null)
+            {
+                return;
+            }
 
-			ActivityIndicatorView.Center = Center;
-		}
+            ActivityIndicatorView.Center = Center;
+        }
 
-		public void StartAnimation()
-		{
-			ActivityIndicatorView?.StartAnimating();
-		}
+        public void StartAnimation()
+        {
+            ActivityIndicatorView?.StartAnimating();
+        }
 
-		public void StopAnimation()
-		{
-			/* Nothing to do */
-		}
+        public void StopAnimation()
+        {
+            /* Nothing to do */
+        }
 
-		protected void Initialize()
-		{
-			BackgroundColor = UIColor.Clear;
+        protected void Initialize()
+        {
+            BackgroundColor = UIColor.Clear;
 
-			Alpha = .8f;
+            Alpha = .8f;
 
-			ActivityIndicatorView = ActivityIndicatorViewFactory();
+            ActivityIndicatorView = ActivityIndicatorViewFactory();
 
-			if (ActivityIndicatorView == null)
-			{
-				throw new InvalidOperationException($"{nameof(ActivityIndicatorViewFactory)} must produce a valid view");
-			}
+            if (ActivityIndicatorView == null)
+            {
+                throw new InvalidOperationException(
+                    $"{nameof(ActivityIndicatorViewFactory)} must produce a valid view");
+            }
 
-			AddSubview(ActivityIndicatorView);
-		}
-	}
+            AddSubview(ActivityIndicatorView);
+        }
+    }
 }

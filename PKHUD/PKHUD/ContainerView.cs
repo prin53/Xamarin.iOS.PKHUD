@@ -23,124 +23,119 @@
 // LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
+
 using System;
 using Foundation;
 using UIKit;
 
 namespace PKHUD
 {
-	internal class ContainerView : UIView
-	{
-		public FrameView FrameView { get; private set; }
+    internal class ContainerView : UIView
+    {
+        public FrameView FrameView { get; private set; }
 
-		public UIView BackgroundView { get; private set; }
+        public UIView BackgroundView { get; private set; }
 
-		public ContainerView(FrameView frameView = null)
-		{
-			Initialize(frameView);
-		}
+        public ContainerView(FrameView frameView = null)
+        {
+            Initialize(frameView);
+        }
 
-		public ContainerView(NSCoder coder) : base(coder)
-		{
-			Initialize();
-		}
+        public ContainerView(NSCoder coder) : base(coder)
+        {
+            Initialize();
+        }
 
-		public ContainerView(IntPtr handle) : base(handle)
-		{
-			Initialize();
-		}
+        public ContainerView(IntPtr handle) : base(handle)
+        {
+            Initialize();
+        }
 
-		public override void LayoutSubviews()
-		{
-			base.LayoutSubviews();
+        public override void LayoutSubviews()
+        {
+            base.LayoutSubviews();
 
-			FrameView.Center = Center;
+            FrameView.Center = Center;
 
-			BackgroundView.Frame = Bounds;
-		}
+            BackgroundView.Frame = Bounds;
+        }
 
-		protected void Initialize(FrameView frameView = null)
-		{
-			FrameView = frameView ?? new FrameView();
+        protected void Initialize(FrameView frameView = null)
+        {
+            FrameView = frameView ?? new FrameView();
 
-			BackgroundView = new UIView
-			{
-				BackgroundColor = new UIColor(0, .25f),
-				Alpha = 0
-			};
+            BackgroundView = new UIView
+            {
+                BackgroundColor = new UIColor(0, .25f),
+                Alpha = 0
+            };
 
-			BackgroundColor = UIColor.Clear;
+            BackgroundColor = UIColor.Clear;
 
-			AddSubviews(BackgroundView, FrameView);
-		}
+            AddSubviews(BackgroundView, FrameView);
+        }
 
-		public void ShowFrameView()
-		{
-			Layer.RemoveAllAnimations();
+        public void ShowFrameView()
+        {
+            Layer.RemoveAllAnimations();
 
-			FrameView.Center = Center;
-			FrameView.Alpha = 1;
+            FrameView.Center = Center;
+            FrameView.Alpha = 1;
 
-			Hidden = false;
-		}
+            Hidden = false;
+        }
 
-		public void HideFrameView(bool animated, Action<bool> completion)
-		{
-			if (Hidden)
-			{
-				return;
-			}
+        public void HideFrameView(bool animated, Action<bool> completion)
+        {
+            if (Hidden)
+            {
+                return;
+            }
 
-			if (animated)
-			{
-				AnimateNotify(.8f, () =>
-				{
-					FrameView.Alpha = 0;
-					HideBackgroundView();
-				}, (finished) =>
-				{
-					Hidden = true;
+            if (animated)
+            {
+                AnimateNotify(.8f, () =>
+                {
+                    FrameView.Alpha = 0;
+                    HideBackgroundView();
+                }, (finished) =>
+                {
+                    Hidden = true;
 
-					RemoveFromSuperview();
+                    RemoveFromSuperview();
 
-					completion?.Invoke(finished);
-				});
-			} 
-			else
-			{
-				FrameView.Alpha = 0;
-				completion?.Invoke(true);
-			}
-		}
+                    completion?.Invoke(finished);
+                });
+            }
+            else
+            {
+                FrameView.Alpha = 0;
+                completion?.Invoke(true);
+            }
+        }
 
-		public void ShowBackgroundView(bool animated = false)
-		{
-			if (animated)
-			{
-				Animate(.175f, () =>
-				{
-					BackgroundView.Alpha = 1;
-				});
-			}
-			else
-			{
-				BackgroundView.Alpha = 1;
-			}
-		}
+        public void ShowBackgroundView(bool animated = false)
+        {
+            if (animated)
+            {
+                Animate(.175f, () => { BackgroundView.Alpha = 1; });
+            }
+            else
+            {
+                BackgroundView.Alpha = 1;
+            }
+        }
 
-		public void HideBackgroundView(bool animated = false)
-		{
-			if (animated)
-			{
-				Animate(.65f, () =>
-				{
-					BackgroundView.Alpha = 0;
-				});
-			}
-			else
-			{
-				BackgroundView.Alpha = 0;
-			}
-		}
-	}
+        public void HideBackgroundView(bool animated = false)
+        {
+            if (animated)
+            {
+                Animate(.65f, () => { BackgroundView.Alpha = 0; });
+            }
+            else
+            {
+                BackgroundView.Alpha = 0;
+            }
+        }
+    }
 }

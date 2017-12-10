@@ -23,70 +23,60 @@
 // LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
+
 using System;
 using UIKit;
 
 namespace PKHUD
 {
-	public static class HUD
-	{
-		public static bool DimsBackground
-		{
-			get
-			{
-				return PKHUD.Instance.DimsBackground;
-			}
-			set
-			{
-				PKHUD.Instance.DimsBackground = value;
-			}
-		}
+    public static class HUD
+    {
+        public static bool DimsBackground
+        {
+            get => PKHUD.Instance.DimsBackground;
+            set => PKHUD.Instance.DimsBackground = value;
+        }
 
-		public static bool AllowsInteraction
-		{
-			get
-			{
-				return PKHUD.Instance.UserInteractionOnUnderlyingViewsEnabled;
-			}
-			set
-			{
-				PKHUD.Instance.UserInteractionOnUnderlyingViewsEnabled = value;
-			}
-		}
+        public static bool AllowsInteraction
+        {
+            get => PKHUD.Instance.UserInteractionOnUnderlyingViewsEnabled;
+            set => PKHUD.Instance.UserInteractionOnUnderlyingViewsEnabled = value;
+        }
 
-		public static bool IsVisible => PKHUD.Instance.IsVisible;
+        public static bool IsVisible => PKHUD.Instance.IsVisible;
 
-		public static void Show(UIView view, UIView onView = default(UIView))
-		{
-			PKHUD.Instance.ContentView = view;
-			PKHUD.Instance.Show(onView);
-		}
+        public static void Show(UIView view, UIView onView = default(UIView))
+        {
+            PKHUD.Instance.ContentView = view;
+            PKHUD.Instance.Show(onView);
+        }
 
-		public static void Hide(Action<bool> completion = default(Action<bool>))
-		{
-			PKHUD.Instance.Hide(false, completion);
-		}
+        public static void Hide(Action<bool> completion = default(Action<bool>))
+        {
+            PKHUD.Instance.Hide(false, completion);
+        }
 
-		public static void Hide(bool animated, Action<bool> completion = default(Action<bool>))
-		{
-			PKHUD.Instance.Hide(animated, completion);
-		}
+        public static void Hide(bool animated, Action<bool> completion = default(Action<bool>))
+        {
+            PKHUD.Instance.Hide(animated, completion);
+        }
 
-		public static void Hide(TimeSpan delay, bool animated = true, Action<bool> completion = default(Action<bool>))
-		{
-			PKHUD.Instance.Hide(delay, animated, completion);
-		}
+        public static void Hide(TimeSpan delay, bool animated = true, Action<bool> completion = default(Action<bool>))
+        {
+            PKHUD.Instance.Hide(delay, animated, completion);
+        }
 
-		public static void Flash(UIView view, UIView onView = default(UIView))
-		{
-			Show(view, onView);
-			Hide(true);
-		}
+        public static void Flash(UIView view, UIView onView = default(UIView))
+        {
+            Show(view, onView);
+            Hide(true);
+        }
 
-		public static void Flash(UIView view, TimeSpan delay, Action<bool> completion = default(Action<bool>), UIView onView = default(UIView))
-		{
-			Show(view, onView);
-			Hide(delay, true, completion);
-		}
-	}
+        public static void Flash(UIView view, TimeSpan delay, Action<bool> completion = default(Action<bool>),
+            UIView onView = default(UIView))
+        {
+            Show(view, onView);
+            Hide(delay, true, completion);
+        }
+    }
 }

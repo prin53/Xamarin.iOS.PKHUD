@@ -23,48 +23,32 @@
 // LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
+
 using System;
 using UIKit;
 
 namespace PKHUD
 {
-	public static class Assets
-	{
-		private static readonly Lazy<UIImage> _crossImageLazy = new Lazy<UIImage>(() => UIImage.FromFile("Cross"));
-		private static readonly Lazy<UIImage> _checkmarkImageLazy = new Lazy<UIImage>(() => UIImage.FromFile("Checkmark"));
-		private static readonly Lazy<UIImage> _progressActivityImageLazy = new Lazy<UIImage>(() => UIImage.FromFile("ProgressActivity"));
-		private static readonly Lazy<UIImage> _progressCircularImageLazy = new Lazy<UIImage>(() => UIImage.FromFile("ProgressCircular"));
+    public static class Assets
+    {
+        private static readonly Lazy<UIImage> CrossImageLazy = 
+            new Lazy<UIImage>(() => UIImage.FromFile("Cross"));
 
-		public static UIImage CrossImage
-		{
-			get
-			{
-				return _crossImageLazy.Value;
-			}
-		}
+        private static readonly Lazy<UIImage> CheckmarkImageLazy =
+            new Lazy<UIImage>(() => UIImage.FromFile("Checkmark"));
 
-		public static UIImage CheckmarkImage
-		{
-			get
-			{
-				return _checkmarkImageLazy.Value;
-			}
-		}
+        private static readonly Lazy<UIImage> ProgressActivityImageLazy =
+            new Lazy<UIImage>(() => UIImage.FromFile("ProgressActivity"));
 
-		public static UIImage ProgressActivity
-		{
-			get
-			{
-				return _progressActivityImageLazy.Value;
-			}
-		}
+        private static readonly Lazy<UIImage> ProgressCircularImageLazy =
+            new Lazy<UIImage>(() => UIImage.FromFile("ProgressCircular"));
 
-		public static UIImage ProgressCircular
-		{
-			get
-			{
-				return _progressCircularImageLazy.Value;
-			}
-		}
-	}
+        public static UIImage CrossImage => CrossImageLazy.Value;
+
+        public static UIImage CheckmarkImage => CheckmarkImageLazy.Value;
+
+        public static UIImage ProgressActivity => ProgressActivityImageLazy.Value;
+
+        public static UIImage ProgressCircular => ProgressCircularImageLazy.Value;
+    }
 }

@@ -23,6 +23,7 @@
 // LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
+
 using System;
 using CoreGraphics;
 using Foundation;
@@ -30,86 +31,83 @@ using UIKit;
 
 namespace PKHUD
 {
-	internal class FrameView : UIVisualEffectView
-	{
-		private const int _motionOffset = 20;
+    internal class FrameView : UIVisualEffectView
+    {
+        private const int MotionOffset = 20;
 
-		private UIView _content;
+        private UIView _content;
 
-		public UIView Content
-		{
-			get
-			{
-				return _content;
-			}
-			set
-			{
-				_content?.RemoveFromSuperview();
+        public UIView Content
+        {
+            get => _content;
+            set
+            {
+                _content?.RemoveFromSuperview();
 
-				_content = value;
+                _content = value;
 
-				if (_content == null)
-				{
-					return;
-				}
+                if (_content == null)
+                {
+                    return;
+                }
 
-				_content.Alpha = .85f;
-				_content.ClipsToBounds = true;
-				_content.ContentMode = UIViewContentMode.Center;
+                _content.Alpha = .85f;
+                _content.ClipsToBounds = true;
+                _content.ContentMode = UIViewContentMode.Center;
 
-				Frame = new CGRect(Frame.Location, _content.Bounds.Size);
+                Frame = new CGRect(Frame.Location, _content.Bounds.Size);
 
-				ContentView.AddSubview(_content);
-			}
-		}
+                ContentView.AddSubview(_content);
+            }
+        }
 
-		public FrameView(NSObjectFlag t) : base(t)
-		{
-			Initialize();
-		}
+        public FrameView(NSObjectFlag t) : base(t)
+        {
+            Initialize();
+        }
 
-		public FrameView(NSCoder coder) : base(coder)
-		{
-			Initialize();
-		}
+        public FrameView(NSCoder coder) : base(coder)
+        {
+            Initialize();
+        }
 
-		public FrameView(IntPtr handle) : base(handle)
-		{
-			Initialize();
-		}
+        public FrameView(IntPtr handle) : base(handle)
+        {
+            Initialize();
+        }
 
-		public FrameView() : base(UIBlurEffect.FromStyle(UIBlurEffectStyle.Light))
-		{
-			Initialize();
-		}
+        public FrameView() : base(UIBlurEffect.FromStyle(UIBlurEffectStyle.Light))
+        {
+            Initialize();
+        }
 
-		protected void Initialize()
-		{
-			Content = new UIView();
+        protected void Initialize()
+        {
+            Content = new UIView();
 
-			BackgroundColor = UIColor.FromWhiteAlpha(.8f, .36f);
+            BackgroundColor = UIColor.FromWhiteAlpha(.8f, .36f);
 
-			Layer.CornerRadius = 9;
-			Layer.MasksToBounds = true;
+            Layer.CornerRadius = 9;
+            Layer.MasksToBounds = true;
 
-			ContentView.AddSubview(Content);
+            ContentView.AddSubview(Content);
 
-			AddMotionEffect(new UIMotionEffectGroup
-			{
-				MotionEffects = new[]
-				{
-					new UIInterpolatingMotionEffect("center.x", UIInterpolatingMotionEffectType.TiltAlongHorizontalAxis)
-					{
-						MaximumRelativeValue = new NSNumber(_motionOffset),
-						MinimumRelativeValue = new NSNumber(-_motionOffset)
-					},
-					new UIInterpolatingMotionEffect("center.y", UIInterpolatingMotionEffectType.TiltAlongVerticalAxis)
-					{
-						MaximumRelativeValue = new NSNumber(_motionOffset),
-						MinimumRelativeValue = new NSNumber(-_motionOffset)
-					}
-				}
-			});
-		}
-	}
+            AddMotionEffect(new UIMotionEffectGroup
+            {
+                MotionEffects = new UIMotionEffect[]
+                {
+                    new UIInterpolatingMotionEffect("center.x", UIInterpolatingMotionEffectType.TiltAlongHorizontalAxis)
+                    {
+                        MaximumRelativeValue = new NSNumber(MotionOffset),
+                        MinimumRelativeValue = new NSNumber(-MotionOffset)
+                    },
+                    new UIInterpolatingMotionEffect("center.y", UIInterpolatingMotionEffectType.TiltAlongVerticalAxis)
+                    {
+                        MaximumRelativeValue = new NSNumber(MotionOffset),
+                        MinimumRelativeValue = new NSNumber(-MotionOffset)
+                    }
+                }
+            });
+        }
+    }
 }

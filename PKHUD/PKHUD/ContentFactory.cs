@@ -23,45 +23,48 @@
 // LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
+
 using UIKit;
 
 namespace PKHUD
 {
-	public static class ContentFactory
-	{
-		public static UIView CreateSuccessContent(string title = default(string), string subtitle = default(string))
-		{
-			return new SuccessView(title, subtitle);
-		}
+    public static class ContentFactory
+    {
+        public static UIView CreateSuccessContent(string title = default(string), string subtitle = default(string))
+        {
+            return new SuccessView(title, subtitle);
+        }
 
-		public static UIView CreateErrorContent(string title = default(string), string subtitle = default(string))
-		{
-			return new ErrorView(title, subtitle);
-		}
+        public static UIView CreateErrorContent(string title = default(string), string subtitle = default(string))
+        {
+            return new ErrorView(title, subtitle);
+        }
 
-		public static UIView CreateProgressContent(string title = default(string), string subtitle = default(string))
-		{
-			return new ProgressView(title, subtitle);
-		}
+        public static UIView CreateProgressContent(string title = default(string), string subtitle = default(string))
+        {
+            return new ProgressView(title, subtitle);
+        }
 
-		public static UIView CreateImageContent(UIImage image, string title = default(string), string subtitle = default(string))
-		{
-			return new SquareBaseView(image, title, subtitle);
-		}
+        public static UIView CreateImageContent(UIImage image, string title = default(string),
+            string subtitle = default(string))
+        {
+            return new SquareBaseView(image, title, subtitle);
+        }
 
-		public static UIView CreateRotatingImageContent(UIImage image, string title = default(string), string subtitle = default(string))
-		{
-			return new RotatingImageView(image, title, subtitle);
-		}
+        public static UIView CreateRotatingImageContent(UIImage image, string title = default(string),
+            string subtitle = default(string))
+        {
+            return new RotatingImageView(image, title, subtitle);
+        }
 
-		public static UIView CreateLabelContent(string text)
-		{
-			return new TextView(text);
-		}
+        public static UIView CreateLabelContent(string text)
+        {
+            return new TextView(text);
+        }
 
-		public static UIView CreateSystemActivityContent()
-		{
-			return new SystemActivityIndicatorView();
-		}
-	}
+        public static UIView CreateSystemActivityContent()
+        {
+            return new SystemActivityIndicatorView();
+        }
+    }
 }

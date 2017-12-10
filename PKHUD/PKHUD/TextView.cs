@@ -23,6 +23,7 @@
 // LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
+
 using System;
 using CoreGraphics;
 using Foundation;
@@ -30,63 +31,60 @@ using UIKit;
 
 namespace PKHUD
 {
-	public class TextView : WideBaseView
-	{
-		private const int _padding = 10;
+    public class TextView : WideBaseView
+    {
+        private const int Padding = 10;
 
-		protected UILabel TitleLabel  { get; private set; }
+        protected UILabel TitleLabel { get; private set; }
 
-		protected virtual Func<UILabel> TitleLabelFactory => () =>
-		{
-			return new UILabel
-			{
-				TextAlignment = UITextAlignment.Center,
-				Font = UIFont.BoldSystemFontOfSize(17),
-				TextColor = UIColor.Black.ColorWithAlpha(.85f),
-				AdjustsFontSizeToFitWidth = true,
-				Lines = 3
-			};
-		};
+        protected virtual Func<UILabel> TitleLabelFactory => () => new UILabel
+        {
+            TextAlignment = UITextAlignment.Center,
+            Font = UIFont.BoldSystemFontOfSize(17),
+            TextColor = UIColor.Black.ColorWithAlpha(.85f),
+            AdjustsFontSizeToFitWidth = true,
+            Lines = 3
+        };
 
-		public TextView(NSCoder coder) : base(coder)
-		{
-			Initialize();
-		}
+        public TextView(NSCoder coder) : base(coder)
+        {
+            Initialize();
+        }
 
-		public TextView(IntPtr handle) : base(handle)
-		{
-			Initialize();
-		}
+        public TextView(IntPtr handle) : base(handle)
+        {
+            Initialize();
+        }
 
-		public TextView(string text)
-		{
-			Initialize(text);
-		}
+        public TextView(string text)
+        {
+            Initialize(text);
+        }
 
-		public override void LayoutSubviews()
-		{
-			base.LayoutSubviews();
+        public override void LayoutSubviews()
+        {
+            base.LayoutSubviews();
 
-			if (TitleLabel == null)
-			{
-				return;
-			}
+            if (TitleLabel == null)
+            {
+                return;
+            }
 
-			TitleLabel.Frame = Bounds.Inset(_padding, _padding);
-		}
+            TitleLabel.Frame = Bounds.Inset(Padding, Padding);
+        }
 
-		protected void Initialize(string text = default(string))
-		{
-			TitleLabel = TitleLabelFactory();
+        protected void Initialize(string text = default(string))
+        {
+            TitleLabel = TitleLabelFactory();
 
-			if (TitleLabel == null)
-			{
-				throw new InvalidOperationException($"{nameof(TitleLabelFactory)} must produce a valid view");
-			}
+            if (TitleLabel == null)
+            {
+                throw new InvalidOperationException($"{nameof(TitleLabelFactory)} must produce a valid view");
+            }
 
-			TitleLabel.Text = text;
+            TitleLabel.Text = text;
 
-			AddSubview(TitleLabel);
-		}
-	}
+            AddSubview(TitleLabel);
+        }
+    }
 }
