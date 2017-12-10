@@ -23,45 +23,54 @@
 // LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
+
 using System;
 using CoreGraphics;
 using Foundation;
+using UIKit;
 
-namespace PKHUD
+namespace PKHUD.Views
 {
-	/// <summary>
-	/// Provides an indeterminate progress view.
-	/// </summary>
-	public class ProgressView : SquareBaseView, IAnimatable
-	{
-		public ProgressView(CGRect frame) : base(frame)
-		{
-			/* Required constructor */
-		}
+    /// <summary>
+    /// Provides an indeterminate progress view.
+    /// </summary>
+    public class ProgressView : SquareBaseView, IAnimation
+    {
+        public override UIImage Image
+        {
+            get => Assets.ProgressActivity;
+            // ReSharper disable once ValueParameterNotUsed
+            set => base.Image = Assets.ProgressActivity;
+        }
+        
+        public ProgressView(CGRect frame) : base(frame)
+        {
+            /* Required constructor */
+        }
 
-		public ProgressView(NSCoder coder) : base(coder)
-		{
-			/* Required constructor */
-		}
+        public ProgressView(NSCoder coder) : base(coder)
+        {
+            /* Required constructor */
+        }
 
-		public ProgressView(IntPtr handle) : base(handle)
-		{
-			/* Required constructor */
-		}
+        public ProgressView(IntPtr handle) : base(handle)
+        {
+            /* Required constructor */
+        }
 
-		public ProgressView(string title = default(string), string subtitle = default(string)) : base(Assets.ProgressActivity, title, subtitle)
-		{
-			/* Required constructor */
-		}
+        public ProgressView()
+        {
+            /* Required constructor */
+        }
 
-		public void StartAnimation()
-		{
-			ImageView.Layer.AddAnimation(AnimationFactory.CreateDiscreteRotationAnimation(), "progressAnimation");
-		}
+        public void StartAnimation()
+        {
+            ImageView.Layer.AddAnimation(AnimationFactory.CreateDiscreteRotationAnimation(), "progressAnimation");
+        }
 
-		public void StopAnimation()
-		{
-			/* Nothing to do */
-		}
-	}
+        public void StopAnimation()
+        {
+            /* Nothing to do */
+        }
+    }
 }

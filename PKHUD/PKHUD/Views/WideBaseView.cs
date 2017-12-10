@@ -1,5 +1,5 @@
 ﻿//
-// PKHUDRotatingImageView.cs
+// WideBaseView.cs
 //
 // Author:
 //       Denys Fiediaiev <prineduard@gmail.com>
@@ -23,46 +23,44 @@
 // LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
+
 using System;
 using CoreGraphics;
 using Foundation;
 using UIKit;
 
-namespace PKHUD
+namespace PKHUD.Views
 {
-	/// <summary>
-	/// Provides a content view that rotates the supplies image automatically.
-	/// </summary>
-	public class RotatingImageView : SquareBaseView, IAnimatable
-	{
-		public RotatingImageView(CGRect frame) : base(frame)
-		{
-			/* Required constructor */
-		}
+    /// <summary>
+    /// A wide base view, which can be subclassed with additional views.
+    /// </summary>
+    public class WideBaseView : UIView
+    {
+        public static CGRect DefaultWideBaseViewFrame { get; }
 
-		public RotatingImageView(NSCoder coder) : base(coder)
-		{
-			/* Required constructor */
-		}
+        static WideBaseView()
+        {
+            DefaultWideBaseViewFrame = new CGRect(CGPoint.Empty, new CGSize(265, 90));
+        }
 
-		public RotatingImageView(IntPtr handle) : base(handle)
-		{
-			/* Required constructor */
-		}
+        public WideBaseView(CGRect frame) : base(frame)
+        {
+            /* Required constructor */
+        }
 
-		public RotatingImageView(UIImage image = default(UIImage), string title = default(string), string subtitle = default(string)) : base(image, title, subtitle)
-		{
-			/* Required constructor */
-		}
+        public WideBaseView(NSCoder coder) : base(coder)
+        {
+            /* Required constructor */
+        }
 
-		public void StartAnimation()
-		{
-			ImageView.Layer.AddAnimation(AnimationFactory.CreateContinuousRotationAnimation(), "progressAnimation");
-		}
+        public WideBaseView(IntPtr handle) : base(handle)
+        {
+            /* Required constructor */
+        }
 
-		public void StopAnimation()
-		{
-			/* Nothing to do */
-		}
-	}
+        public WideBaseView() : base(DefaultWideBaseViewFrame)
+        {
+            /* Required constructor */
+        }
+    }
 }

@@ -1,5 +1,5 @@
 ﻿//
-// TextView.cs
+// PKHUDRotatingImageView.cs
 //
 // Author:
 //       Denys Fiediaiev <prineduard@gmail.com>
@@ -23,70 +23,47 @@
 // LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
+
 using System;
 using CoreGraphics;
 using Foundation;
 using UIKit;
 
-namespace PKHUD
+namespace PKHUD.Views
 {
-	public class TextView : WideBaseView
-	{
-		private const int _padding = 10;
+    /// <summary>
+    /// Provides a content view that rotates the supplies image automatically.
+    /// </summary>
+    public class RotatingImageView : SquareBaseView, IAnimation
+    {
+        public RotatingImageView(CGRect frame) : base(frame)
+        {
+            /* Required constructor */
+        }
 
-		protected UILabel TitleLabel  { get; private set; }
+        public RotatingImageView(NSCoder coder) : base(coder)
+        {
+            /* Required constructor */
+        }
 
-		protected virtual Func<UILabel> TitleLabelFactory => () =>
-		{
-			return new UILabel
-			{
-				TextAlignment = UITextAlignment.Center,
-				Font = UIFont.BoldSystemFontOfSize(17),
-				TextColor = UIColor.Black.ColorWithAlpha(.85f),
-				AdjustsFontSizeToFitWidth = true,
-				Lines = 3
-			};
-		};
+        public RotatingImageView(IntPtr handle) : base(handle)
+        {
+            /* Required constructor */
+        }
 
-		public TextView(NSCoder coder) : base(coder)
-		{
-			Initialize();
-		}
+        public RotatingImageView()
+        {
+            /* Required constructor */
+        }
 
-		public TextView(IntPtr handle) : base(handle)
-		{
-			Initialize();
-		}
+        public void StartAnimation()
+        {
+            ImageView.Layer.AddAnimation(AnimationFactory.CreateContinuousRotationAnimation(), "progressAnimation");
+        }
 
-		public TextView(string text)
-		{
-			Initialize(text);
-		}
-
-		public override void LayoutSubviews()
-		{
-			base.LayoutSubviews();
-
-			if (TitleLabel == null)
-			{
-				return;
-			}
-
-			TitleLabel.Frame = Bounds.Inset(_padding, _padding);
-		}
-
-		protected void Initialize(string text = default(string))
-		{
-			TitleLabel = TitleLabelFactory();
-
-			if (TitleLabel == null)
-			{
-				throw new InvalidOperationException($"{nameof(TitleLabelFactory)} must produce a valid view");
-			}
-
-			TitleLabel.Text = text;
-
-			AddSubview(TitleLabel);
-		}
-	}
+        public void StopAnimation()
+        {
+            /* Nothing to do */
+        }
+    }
 }

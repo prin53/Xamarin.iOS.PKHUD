@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <Project DefaultTargets="Build" ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
@@ -9,7 +9,7 @@
     <RootNamespace>PKHUD</RootNamespace>
     <AssemblyName>PKHUD</AssemblyName>
     <IPhoneResourcePrefix>Resources</IPhoneResourcePrefix>
-    <ReleaseVersion>1.0.3</ReleaseVersion>
+    <ReleaseVersion>1.0.4</ReleaseVersion>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -22,8 +22,6 @@
     <CodesignKey>iPhone Developer</CodesignKey>
     <MtouchDebug>true</MtouchDebug>
     <MtouchFastDev>true</MtouchFastDev>
-    <MtouchUseSGen>true</MtouchUseSGen>
-    <MtouchUseRefCounting>true</MtouchUseRefCounting>
     <IOSDebuggerPort>25234</IOSDebuggerPort>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
@@ -33,8 +31,6 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
     <CodesignKey>iPhone Developer</CodesignKey>
-    <MtouchUseSGen>true</MtouchUseSGen>
-    <MtouchUseRefCounting>true</MtouchUseRefCounting>
     <MtouchLink>SdkOnly</MtouchLink>
   </PropertyGroup>
   <ItemGroup>
@@ -47,24 +43,25 @@
     <Folder Include="Resources\" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Builder.cs" />
+    <Compile Include="ContentBuilder.cs" />
+    <Compile Include="HudExtensions.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="FrameView.cs" />
-    <Compile Include="WideBaseView.cs" />
-    <Compile Include="TextView.cs" />
-    <Compile Include="IAnimatable.cs" />
-    <Compile Include="SystemActivityIndicatorView.cs" />
-    <Compile Include="HUD.cs" />
-    <Compile Include="PKHUD.cs" />
+    <Compile Include="Views\ErrorView.cs" />
+    <Compile Include="Views\ProgressView.cs" />
+    <Compile Include="Views\RotatingImageView.cs" />
+    <Compile Include="Views\SquareBaseView.cs" />
+    <Compile Include="Views\SuccessView.cs" />
+    <Compile Include="Views\SystemActivityIndicatorView.cs" />
+    <Compile Include="IAnimation.cs" />
+    <Compile Include="Hud.cs" />
     <Compile Include="ContainerView.cs" />
+    <Compile Include="Views\TextView.cs" />
+    <Compile Include="Views\WideBaseView.cs" />
     <Compile Include="WindowRootViewController.cs" />
-    <Compile Include="SuccessView.cs" />
-    <Compile Include="SquareBaseView.cs" />
-    <Compile Include="RotatingImageView.cs" />
     <Compile Include="AnimationFactory.cs" />
-    <Compile Include="ProgressView.cs" />
     <Compile Include="Assets.cs" />
-    <Compile Include="ErrorView.cs" />
-    <Compile Include="ContentFactory.cs" />
   </ItemGroup>
   <ItemGroup>
     <BundleResource Include="Resources\ProgressActivity%403x.png" />
