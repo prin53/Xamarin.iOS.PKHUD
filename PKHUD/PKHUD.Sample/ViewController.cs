@@ -1,30 +1,4 @@
-﻿//
-// ViewController.cs
-//
-// Author:
-//       Denys Fiediaiev <prineduard@gmail.com>
-//
-// Copyright (c) 2017 
-//
-// Permission is hereby granted, free of charge, to any person obtaining a copy
-// of this software and associated documentation files (the "Software"), to deal
-// in the Software without restriction, including without limitation the rights
-// to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-// copies of the Software, and to permit persons to whom the Software is
-// furnished to do so, subject to the following conditions:
-//
-// The above copyright notice and this permission notice shall be included in
-// all copies or substantial portions of the Software.
-//
-// THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-// IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-// FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-// AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-// LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-// OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
-// THE SOFTWARE.
-
-using System;
+﻿using System;
 using System.Diagnostics;
 using System.Threading.Tasks;
 using UIKit;
@@ -34,7 +8,7 @@ namespace PKHUD.Sample
     /// <summary>
     /// Please note that the blow demonstrates the "porcelain" interface
     /// - a more concise and clean way to work with the HUD.
-    /// If you need more options and flexbility, 
+    /// If you need more options and flexibility, 
     /// feel free to use the underlying "plumbing". E.g.:
     /// PKHUD.Instance.Show();
     /// PKHUD.Instance.ContentView = new SuccessView("Success!");
@@ -45,32 +19,23 @@ namespace PKHUD.Sample
         private const int Padding = 16;
         private const int ButtonHeight = 44;
 
-        protected UIImageView BackgroundImage { get; private set; }
-
-        protected UIStackView ButtonsStack { get; private set; }
-
-        protected UIButton AnimatedSuccessButton { get; private set; }
-
-        protected UIButton AnimatedErrorButton { get; private set; }
-
-        protected UIButton AnimatedProgressButton { get; private set; }
-
-        protected UIButton GraceAnimatedProgressButton { get; private set; }
-
-        protected UIButton AnimatedStatusProgressButton { get; private set; }
-
-        protected UIButton TextButton { get; private set; }
+        private UIImageView _backgroundImage = null!;
+        private UIStackView _buttonsStack = null!;
+        private UIButton _animatedSuccessButton = null!;
+        private UIButton _animatedErrorButton = null!;
+        private UIButton _animatedProgressButton = null!;
+        private UIButton _graceAnimatedProgressButton = null!;
+        private UIButton _animatedStatusProgressButton = null!;
+        private UIButton _textButton = null!;
 
         private static UIButton CreateButton(string title)
         {
             var button = UIButton.FromType(UIButtonType.System);
-            {
-                button.TranslatesAutoresizingMaskIntoConstraints = false;
-                button.SetTitleColor(UIColor.FromRGB(64, 64, 64), UIControlState.Normal);
-                button.SetTitleShadowColor(UIColor.FromRGB(128, 128, 128), UIControlState.Normal);
-                button.SetTitle(title, UIControlState.Normal);
-                button.BackgroundColor = UIColor.FromRGB(255, 255, 255).ColorWithAlpha(.66f);
-            }
+            button.TranslatesAutoresizingMaskIntoConstraints = false;
+            button.SetTitleColor(UIColor.FromRGB(64, 64, 64), UIControlState.Normal);
+            button.SetTitleShadowColor(UIColor.FromRGB(128, 128, 128), UIControlState.Normal);
+            button.SetTitle(title, UIControlState.Normal);
+            button.BackgroundColor = UIColor.FromRGB(255, 255, 255).ColorWithAlpha(.66f);
             return button;
         }
 
@@ -134,12 +99,12 @@ namespace PKHUD.Sample
         {
             if (disposing)
             {
-                AnimatedSuccessButton.TouchUpInside -= AnimatedSuccessButtonOnTouchUpInside;
-                AnimatedErrorButton.TouchUpInside -= AnimatedErrorButtonOnTouchUpInside;
-                AnimatedProgressButton.TouchUpInside -= AnimatedProgressButtonOnTouchUpInside;
-                GraceAnimatedProgressButton.TouchUpInside -= GraceAnimatedProgressButtonOnTouchUpInside;
-                AnimatedStatusProgressButton.TouchUpInside -= AnimatedStatusProgressButtonOnTouchUpInside;
-                TextButton.TouchUpInside -= TextButtonOnTouchUpInside;
+                _animatedSuccessButton.TouchUpInside -= AnimatedSuccessButtonOnTouchUpInside;
+                _animatedErrorButton.TouchUpInside -= AnimatedErrorButtonOnTouchUpInside;
+                _animatedProgressButton.TouchUpInside -= AnimatedProgressButtonOnTouchUpInside;
+                _graceAnimatedProgressButton.TouchUpInside -= GraceAnimatedProgressButtonOnTouchUpInside;
+                _animatedStatusProgressButton.TouchUpInside -= AnimatedStatusProgressButtonOnTouchUpInside;
+                _textButton.TouchUpInside -= TextButtonOnTouchUpInside;
             }
 
             base.Dispose(disposing);
@@ -149,83 +114,83 @@ namespace PKHUD.Sample
         {
             base.ViewDidLoad();
 
-            View.BackgroundColor = UIColor.White;
+            View!.BackgroundColor = UIColor.White;
 
-            BackgroundImage = new UIImageView
+            _backgroundImage = new UIImageView
             {
                 TranslatesAutoresizingMaskIntoConstraints = false,
                 Image = UIImage.FromBundle("Background"),
                 ContentMode = UIViewContentMode.ScaleAspectFill
             };
 
-            ButtonsStack = new UIStackView
+            _buttonsStack = new UIStackView
             {
                 TranslatesAutoresizingMaskIntoConstraints = false,
                 Axis = UILayoutConstraintAxis.Vertical,
                 Spacing = 8
             };
 
-            AnimatedSuccessButton = CreateButton("Animated Success HUD");
-            AnimatedSuccessButton.TouchUpInside += AnimatedSuccessButtonOnTouchUpInside;
+            _animatedSuccessButton = CreateButton("Animated Success HUD");
+            _animatedSuccessButton.TouchUpInside += AnimatedSuccessButtonOnTouchUpInside;
 
-            AnimatedErrorButton = CreateButton("Animated Error HUD");
-            AnimatedErrorButton.TouchUpInside += AnimatedErrorButtonOnTouchUpInside;
+            _animatedErrorButton = CreateButton("Animated Error HUD");
+            _animatedErrorButton.TouchUpInside += AnimatedErrorButtonOnTouchUpInside;
 
-            AnimatedProgressButton = CreateButton("Animated Progress HUD");
-            AnimatedProgressButton.TouchUpInside += AnimatedProgressButtonOnTouchUpInside;
+            _animatedProgressButton = CreateButton("Animated Progress HUD");
+            _animatedProgressButton.TouchUpInside += AnimatedProgressButtonOnTouchUpInside;
 
-            GraceAnimatedProgressButton = CreateButton("Grace Animated Progress HUD");
-            GraceAnimatedProgressButton.TouchUpInside += GraceAnimatedProgressButtonOnTouchUpInside;
+            _graceAnimatedProgressButton = CreateButton("Grace Animated Progress HUD");
+            _graceAnimatedProgressButton.TouchUpInside += GraceAnimatedProgressButtonOnTouchUpInside;
 
-            AnimatedStatusProgressButton = CreateButton("Animated Status Progress HUD");
-            AnimatedStatusProgressButton.TouchUpInside += AnimatedStatusProgressButtonOnTouchUpInside;
+            _animatedStatusProgressButton = CreateButton("Animated Status Progress HUD");
+            _animatedStatusProgressButton.TouchUpInside += AnimatedStatusProgressButtonOnTouchUpInside;
 
-            TextButton = CreateButton("Text HUD");
-            TextButton.TouchUpInside += TextButtonOnTouchUpInside;
+            _textButton = CreateButton("Text HUD");
+            _textButton.TouchUpInside += TextButtonOnTouchUpInside;
 
-            ButtonsStack.AddArrangedSubview(AnimatedSuccessButton);
-            ButtonsStack.AddArrangedSubview(AnimatedErrorButton);
-            ButtonsStack.AddArrangedSubview(AnimatedProgressButton);
-            ButtonsStack.AddArrangedSubview(GraceAnimatedProgressButton);
-            ButtonsStack.AddArrangedSubview(AnimatedStatusProgressButton);
-            ButtonsStack.AddArrangedSubview(TextButton);
+            _buttonsStack.AddArrangedSubview(_animatedSuccessButton);
+            _buttonsStack.AddArrangedSubview(_animatedErrorButton);
+            _buttonsStack.AddArrangedSubview(_animatedProgressButton);
+            _buttonsStack.AddArrangedSubview(_graceAnimatedProgressButton);
+            _buttonsStack.AddArrangedSubview(_animatedStatusProgressButton);
+            _buttonsStack.AddArrangedSubview(_textButton);
 
-            View.AddSubviews(BackgroundImage, ButtonsStack);
+            View.AddSubviews(_backgroundImage, _buttonsStack);
 
             if (UIDevice.CurrentDevice.CheckSystemVersion(11, 0))
             {
-                View.AddConstraint(ButtonsStack.LeadingAnchor.ConstraintEqualTo(
+                View.AddConstraint(_buttonsStack.LeadingAnchor.ConstraintEqualTo(
                     View.SafeAreaLayoutGuide.LeadingAnchor,
                     Padding
                 ));
-                View.AddConstraint(ButtonsStack.TrailingAnchor.ConstraintEqualTo(
+                View.AddConstraint(_buttonsStack.TrailingAnchor.ConstraintEqualTo(
                     View.SafeAreaLayoutGuide.TrailingAnchor,
                     -Padding
                 ));
-                View.AddConstraint(ButtonsStack.BottomAnchor.ConstraintEqualTo(
+                View.AddConstraint(_buttonsStack.BottomAnchor.ConstraintEqualTo(
                     View.SafeAreaLayoutGuide.BottomAnchor,
                     -Padding
                 ));
             }
             else
             {
-                View.AddConstraint(ButtonsStack.LeadingAnchor.ConstraintEqualTo(View.LeadingAnchor, Padding));
-                View.AddConstraint(ButtonsStack.TrailingAnchor.ConstraintEqualTo(View.TrailingAnchor, -Padding));
-                View.AddConstraint(ButtonsStack.BottomAnchor.ConstraintEqualTo(View.BottomAnchor, -Padding));
+                View.AddConstraint(_buttonsStack.LeadingAnchor.ConstraintEqualTo(View.LeadingAnchor, Padding));
+                View.AddConstraint(_buttonsStack.TrailingAnchor.ConstraintEqualTo(View.TrailingAnchor, -Padding));
+                View.AddConstraint(_buttonsStack.BottomAnchor.ConstraintEqualTo(View.BottomAnchor, -Padding));
             }
 
             View.AddConstraints(new[]
             {
-                BackgroundImage.TopAnchor.ConstraintEqualTo(View.TopAnchor),
-                BackgroundImage.BottomAnchor.ConstraintEqualTo(View.BottomAnchor),
-                BackgroundImage.LeadingAnchor.ConstraintEqualTo(View.LeadingAnchor),
-                BackgroundImage.TrailingAnchor.ConstraintEqualTo(View.TrailingAnchor),
-                AnimatedSuccessButton.HeightAnchor.ConstraintEqualTo(ButtonHeight),
-                AnimatedErrorButton.HeightAnchor.ConstraintEqualTo(ButtonHeight),
-                AnimatedProgressButton.HeightAnchor.ConstraintEqualTo(ButtonHeight),
-                GraceAnimatedProgressButton.HeightAnchor.ConstraintEqualTo(ButtonHeight),
-                AnimatedStatusProgressButton.HeightAnchor.ConstraintEqualTo(ButtonHeight),
-                TextButton.HeightAnchor.ConstraintEqualTo(ButtonHeight)
+                _backgroundImage.TopAnchor.ConstraintEqualTo(View.TopAnchor),
+                _backgroundImage.BottomAnchor.ConstraintEqualTo(View.BottomAnchor),
+                _backgroundImage.LeadingAnchor.ConstraintEqualTo(View.LeadingAnchor),
+                _backgroundImage.TrailingAnchor.ConstraintEqualTo(View.TrailingAnchor),
+                _animatedSuccessButton.HeightAnchor.ConstraintEqualTo(ButtonHeight),
+                _animatedErrorButton.HeightAnchor.ConstraintEqualTo(ButtonHeight),
+                _animatedProgressButton.HeightAnchor.ConstraintEqualTo(ButtonHeight),
+                _graceAnimatedProgressButton.HeightAnchor.ConstraintEqualTo(ButtonHeight),
+                _animatedStatusProgressButton.HeightAnchor.ConstraintEqualTo(ButtonHeight),
+                _textButton.HeightAnchor.ConstraintEqualTo(ButtonHeight)
             });
         }
 

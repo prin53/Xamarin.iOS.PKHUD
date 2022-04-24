@@ -1,30 +1,4 @@
-﻿//
-// SquareBaseView.cs
-//
-// Author:
-//       Denys Fiediaiev <prineduard@gmail.com>
-//
-// Copyright (c) 2017 
-//
-// Permission is hereby granted, free of charge, to any person obtaining a copy
-// of this software and associated documentation files (the "Software"), to deal
-// in the Software without restriction, including without limitation the rights
-// to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-// copies of the Software, and to permit persons to whom the Software is
-// furnished to do so, subject to the following conditions:
-//
-// The above copyright notice and this permission notice shall be included in
-// all copies or substantial portions of the Software.
-//
-// THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-// IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-// FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-// AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-// LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-// OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
-// THE SOFTWARE.
-
-using System;
+﻿using System;
 using CoreGraphics;
 using Foundation;
 using UIKit;
@@ -38,56 +12,9 @@ namespace PKHUD.Views
     {
         private static readonly CGRect DefaultSquareBaseViewFrame;
 
-        private string _title;
-        private string _subtitle;
-        private UIImage _image;
-
-        public virtual string Title
-        {
-            get => _title;
-            set
-            {
-                _title = value;
-
-                if (TitleLabel != null)
-                {
-                    TitleLabel.Text = _title;
-                }
-            }
-        }
-
-        public virtual string Subtitle
-        {
-            get => _subtitle;
-            set
-            {
-                _subtitle = value;
-
-                if (SubtitleLabel != null)
-                {
-                    SubtitleLabel.Text = _subtitle;
-                }
-            }
-        }
-
-        public virtual UIImage Image
-        {
-            get => _image;
-            set
-            {
-                _image = value;
-
-                if (ImageView != null)
-                {
-                    ImageView.Image = _image;
-                }
-            }
-        }
-
-        static SquareBaseView()
-        {
-            DefaultSquareBaseViewFrame = new CGRect(CGPoint.Empty, new CGSize(156, 156));
-        }
+        private string? _title;
+        private string? _subtitle;
+        private UIImage? _image;
 
         protected virtual Func<UIImageView> ImageViewFactory => () => new UIImageView
         {
@@ -115,11 +42,58 @@ namespace PKHUD.Views
             MinimumScaleFactor = .25f
         };
 
-        protected UIImageView ImageView { get; private set; }
+        protected UIImageView? ImageView { get; private set; }
 
-        protected UILabel TitleLabel { get; private set; }
+        protected UILabel? TitleLabel { get; private set; }
 
-        protected UILabel SubtitleLabel { get; private set; }
+        protected UILabel? SubtitleLabel { get; private set; }
+        
+        public virtual string? Title
+        {
+            get => _title;
+            set
+            {
+                _title = value;
+
+                if (TitleLabel != null)
+                {
+                    TitleLabel.Text = _title;
+                }
+            }
+        }
+
+        public virtual string? Subtitle
+        {
+            get => _subtitle;
+            set
+            {
+                _subtitle = value;
+
+                if (SubtitleLabel != null)
+                {
+                    SubtitleLabel.Text = _subtitle;
+                }
+            }
+        }
+
+        public virtual UIImage? Image
+        {
+            get => _image;
+            set
+            {
+                _image = value;
+
+                if (ImageView != null)
+                {
+                    ImageView.Image = _image;
+                }
+            }
+        }
+
+        static SquareBaseView()
+        {
+            DefaultSquareBaseViewFrame = new CGRect(CGPoint.Empty, new CGSize(156, 156));
+        }
 
         public SquareBaseView(CGRect frame) : base(frame)
         {
@@ -181,9 +155,20 @@ namespace PKHUD.Views
             var quarterHeight = viewHeight / 4;
             var threeQuarterHeight = viewHeight / 4 * 3;
 
-            TitleLabel.Frame = new CGRect(CGPoint.Empty, new CGSize(viewWidth, quarterHeight));
-            ImageView.Frame = new CGRect(new CGPoint(0, quarterHeight), new CGSize(viewWidth, halfHeight));
-            SubtitleLabel.Frame = new CGRect(new CGPoint(0, threeQuarterHeight), new CGSize(viewWidth, quarterHeight));
+            if (TitleLabel != null)
+            {
+                TitleLabel.Frame = new CGRect(CGPoint.Empty, new CGSize(viewWidth, quarterHeight));
+            }
+
+            if (ImageView != null)
+            {
+                ImageView.Frame = new CGRect(new CGPoint(0, quarterHeight), new CGSize(viewWidth, halfHeight));
+            }
+
+            if (SubtitleLabel != null)
+            {
+                SubtitleLabel.Frame = new CGRect(new CGPoint(0, threeQuarterHeight), new CGSize(viewWidth, quarterHeight));
+            }
         }
     }
 }
