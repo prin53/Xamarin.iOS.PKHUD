@@ -1,70 +1,27 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<Project DefaultTargets="Build" ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+<Project Sdk="MSBuild.Sdk.Extras/2.0.54">
   <PropertyGroup>
-    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
-    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{9289E050-5175-4389-9CFC-1E58F2C1D522}</ProjectGuid>
-    <ProjectTypeGuids>{FEACFBD2-3405-455C-9665-78FE426C6842};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
-    <OutputType>Library</OutputType>
-    <RootNamespace>PKHUD</RootNamespace>
-    <AssemblyName>PKHUD</AssemblyName>
-    <IPhoneResourcePrefix>Resources</IPhoneResourcePrefix>
-    <ReleaseVersion>1.0.5</ReleaseVersion>
+    <TargetFramework>Xamarin.iOS10</TargetFramework>
+    <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+    <PackageId>Prin53.Xamarin.iOS.PKHUD</PackageId>
+    <PackageVersion>1.0.5</PackageVersion>
+    <Title>PKHUD</Title>
+    <Description>A Xamarin.iOS based reimplementation of the Apple HUD (Volume, Ringer, Rotation,…) for iOS 8 and up. </Description>
+    <Copyright>Prin53</Copyright>
+    <Authors>Prin53</Authors>
+    <Owners>Prin53</Owners>
+    <NeutralLanguage>en</NeutralLanguage>
+    <PackageTags>pkhud, xamarin, xamarin.ios</PackageTags>
+    <PackageIconUrl>https://imgur.com/jDiKURX</PackageIconUrl>
+    <PackageProjectUrl>https://github.com/Prin53/Xamarin.iOS.PKHUD</PackageProjectUrl>
+    <PackageRequireLicenseAcceptance>false</PackageRequireLicenseAcceptance>
+    <PackageLicenseExpression>MIT</PackageLicenseExpression>
+    <PublishRepositoryUrl>true</PublishRepositoryUrl>
+    <RepositoryType>git</RepositoryType>
+    <RepositoryUrl>https://github.com/prin53/Xamarin.iOS.PKHUD</RepositoryUrl>
     <LangVersion>default</LangVersion>
     <Nullable>enable</Nullable>
   </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
-    <DebugSymbols>true</DebugSymbols>
-    <DebugType>full</DebugType>
-    <Optimize>false</Optimize>
-    <OutputPath>bin\Debug</OutputPath>
-    <DefineConstants>DEBUG;</DefineConstants>
-    <ErrorReport>prompt</ErrorReport>
-    <WarningLevel>4</WarningLevel>
-    <CodesignKey>iPhone Developer</CodesignKey>
-    <MtouchDebug>true</MtouchDebug>
-    <MtouchFastDev>true</MtouchFastDev>
-    <IOSDebuggerPort>25234</IOSDebuggerPort>
-  </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
-    <DebugType>pdbonly</DebugType>
-    <Optimize>true</Optimize>
-    <OutputPath>bin\Release</OutputPath>
-    <ErrorReport>prompt</ErrorReport>
-    <WarningLevel>4</WarningLevel>
-    <CodesignKey>iPhone Developer</CodesignKey>
-    <MtouchLink>SdkOnly</MtouchLink>
-  </PropertyGroup>
-  <ItemGroup>
-    <Reference Include="System" />
-    <Reference Include="System.Xml" />
-    <Reference Include="System.Core" />
-    <Reference Include="Xamarin.iOS" />
-  </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Resources\" />
-  </ItemGroup>
-  <ItemGroup>
-    <Compile Include="Builder.cs" />
-    <Compile Include="ContentBuilder.cs" />
-    <Compile Include="HudExtensions.cs" />
-    <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="FrameView.cs" />
-    <Compile Include="Views\ErrorView.cs" />
-    <Compile Include="Views\ProgressView.cs" />
-    <Compile Include="Views\RotatingImageView.cs" />
-    <Compile Include="Views\SquareBaseView.cs" />
-    <Compile Include="Views\SuccessView.cs" />
-    <Compile Include="Views\SystemActivityIndicatorView.cs" />
-    <Compile Include="IAnimation.cs" />
-    <Compile Include="Hud.cs" />
-    <Compile Include="ContainerView.cs" />
-    <Compile Include="Views\TextView.cs" />
-    <Compile Include="Views\WideBaseView.cs" />
-    <Compile Include="WindowRootViewController.cs" />
-    <Compile Include="AnimationFactory.cs" />
-    <Compile Include="Assets.cs" />
-  </ItemGroup>
   <ItemGroup>
     <BundleResource Include="Resources\ProgressActivity%403x.png" />
     <BundleResource Include="Resources\ProgressActivity%402x.png" />
@@ -75,5 +32,7 @@
     <BundleResource Include="Resources\ProgressCircular%402x.png" />
     <BundleResource Include="Resources\ProgressCircular%403x.png" />
   </ItemGroup>
-  <Import Project="$(MSBuildExtensionsPath)\Xamarin\iOS\Xamarin.iOS.CSharp.targets" />
+  <ItemGroup>
+    <Folder Include="Properties" />
+  </ItemGroup>
 </Project>
