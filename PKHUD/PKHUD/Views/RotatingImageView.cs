@@ -31,7 +31,7 @@ namespace PKHUD.Views
 
         public void StartAnimation()
         {
-            ImageView.Layer.AddAnimation(AnimationFactory.CreateContinuousRotationAnimation(), "progressAnimation");
+            ImageView?.Layer.AddAnimation(AnimationFactory.CreateContinuousRotationAnimation(), "progressAnimation");
         }
 
         public void StopAnimation()
